@@ -1,0 +1,113 @@
+     1                                  extern printf
+     2                                  extern scanf
+     3                                  global adding_two_integers
+     4                                  
+     5                                  segment .data
+     6                                  
+     7 00000000 546869732070726F67-     intro_message db "This program was built by Darren Vu.", 10, 0
+     7 00000009 72616D207761732062-
+     7 00000012 75696C742062792044-
+     7 0000001B 617272656E2056752E-
+     7 00000024 0A00               
+     8 00000026 54686520696E746567-     end_message db "The integer 5 will be returned to the calling program", 10, 0
+     8 0000002F 657220352077696C6C-
+     8 00000038 206265207265747572-
+     8 00000041 6E656420746F207468-
+     8 0000004A 652063616C6C696E67-
+     8 00000053 2070726F6772616D0A-
+     8 0000005C 00                 
+     9 0000005D 506C6561736520696E-     first_input db "Please input the first integer: ", 0
+     9 00000066 707574207468652066-
+     9 0000006F 6972737420696E7465-
+     9 00000078 6765723A2000       
+    10 0000007E 506C6561736520696E-     second_input db "Please input the second integer: ", 0
+    10 00000087 707574207468652073-
+    10 00000090 65636F6E6420696E74-
+    10 00000099 656765723A2000     
+    11 000000A0 596F7520656E746572-     confirmation db "You entered %d", 10, 0
+    11 000000A9 65642025640A00     
+    12 000000B0 5468652073756D206F-     sum_result db "The sum of these two integers is %d.", 10, 0
+    12 000000B9 662074686573652074-
+    12 000000C2 776F20696E74656765-
+    12 000000CB 72732069732025642E-
+    12 000000D4 0A00               
+    13 000000D6 5468652070726F6475-     product_result db "The product of these two integers is %d.", 10, 0
+    13 000000DF 6374206F6620746865-
+    13 000000E8 73652074776F20696E-
+    13 000000F1 746567657273206973-
+    13 000000FA 2025642E0A00       
+    14 00000100 256400                  integer_f db "%d", 0
+    15                                  
+    16                                  segment .bss
+    17                                  
+    18                                  segment .text
+    19                                  
+    20                                  adding_two_integers:
+    21                                  
+    22 00000000 B800000000              mov rax, 0                  ;when you mov 0 into rax it means that you aren't dealing with
+    23 00000005 48BF-                   mov rdi, intro_message      ;floating point numbers, if it was mov rax, 1 it would mean dealing with floats
+    23 00000007 [0000000000000000] 
+    24 0000000F E8(00000000)            call printf                 ;call printf to print out whatever was just moved into rdi (intro_message)
+    25                                  
+    26 00000014 B800000000              mov rax, 0
+    27 00000019 48BF-                   mov rdi, first_input
+    27 0000001B [5D00000000000000] 
+    28 00000023 E8(00000000)            call printf                 ;calling printf to print out first_input just like above
+    29                                  
+    30 00000028 6A00                    push qword 0                ;reserve some space on top of the stack
+    31 0000002A B800000000              mov rax, 0
+    32 0000002F 48BF-                   mov rdi, integer_f
+    32 00000031 [0001000000000000] 
+    33 00000039 4889E6                  mov rsi, rsp
+    34 0000003C E8(00000000)            call scanf                  ;call scanf to recieve an input an input formatted by "integer_f" which is %d
+    35 00000041 4C8B3C24                mov r15, [rsp]              ;move the contents of rsp (which should be whatever you just scanf'd) into r15
+    36 00000045 58                      pop rax
+    37                                  
+    38 00000046 B800000000              mov rax, 0
+    39 0000004B 48BF-                   mov rdi, confirmation
+    39 0000004D [A000000000000000] 
+    40 00000055 4C89FE                  mov rsi, r15
+    41 00000058 E8(00000000)            call printf
+    42                                  
+    43 0000005D B800000000              mov rax, 0
+    44 00000062 48BF-                   mov rdi, second_input
+    44 00000064 [7E00000000000000] 
+    45 0000006C E8(00000000)            call printf
+    46                                  
+    47 00000071 6A00                    push qword 0
+    48 00000073 B800000000              mov rax, 0
+    49 00000078 48BF-                   mov rdi, integer_f
+    49 0000007A [0001000000000000] 
+    50 00000082 4889E6                  mov rsi, rsp
+    51 00000085 E8(00000000)            call scanf
+    52 0000008A 4C8B3424                mov r14, [rsp]              
+    53 0000008E 58                      pop rax
+    54                                  
+    55 0000008F B800000000              mov rax, 0
+    56 00000094 48BF-                   mov rdi, confirmation
+    56 00000096 [A000000000000000] 
+    57 0000009E 4C89F6                  mov rsi, r14
+    58 000000A1 E8(00000000)            call printf
+    59                                  
+    60 000000A6 4D89F0                  mov r8, r14                 ;move the value of r14 into a new register r8
+    61 000000A9 4D01F8                  add r8, r15                 ;r8 discards its value and the new value is r14
+    62                                                              ;plus the value or whatever is in r15
+    63                                  
+    64 000000AC B800000000              mov rax, 0
+    65 000000B1 48BF-                   mov rdi, sum_result         ;sum result is %d which is how you print an integer in C
+    65 000000B3 [B000000000000000] 
+    66 000000BB 4C89C6                  mov rsi, r8
+    67 000000BE E8(00000000)            call printf
+    68                                  
+    69 000000C3 4D89F1                  mov r9, r14                 ;mov the value that r14 holds into r9
+    70 000000C6 4D89FA                  mov r10, r15                ;mov the value that r15 holds into r10
+    71 000000C9 4D0FAFCA                imul r9, r10                ;imul used to multiply registers r9 and r10
+    72                                                              ;r9 holds the new value while r10 remains the same
+    73                                  
+    74 000000CD B800000000              mov rax, 0
+    75 000000D2 48BF-                   mov rdi, product_result
+    75 000000D4 [D600000000000000] 
+    76 000000DC 4C89CE                  mov rsi, r9
+    77 000000DF E8(00000000)            call printf
+    78                                  
+    79 000000E4 C3                      ret
