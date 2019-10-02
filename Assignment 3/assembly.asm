@@ -1,6 +1,5 @@
 extern printf
 extern scanf
-extern getchar
 global control_d
 
 segment .data
@@ -16,7 +15,8 @@ confirmation db "You entered %d", 10, 0
 sum_result db "The sum of these two integers is %d.", 10, 0
 product_result db "The product of these two integers is %d.", 10, 0
 integer_f db "%d", 0
-string_f db "%s", 0
+char_f db "%c", 0
+string_confirmation db "Your char was: %c", 10, 0
 print_value db "The value that lies in this register is: %d", 10, 0
 print_total_numbers db "The amount of numbers entered was: %d", 10, 0
 print_mean db "The integer mean was: %d", 10, 0
@@ -57,7 +57,8 @@ call scanf
 mov r13, [rsp]  ;Move the scanned value into register r13
 pop rax
 
-;cdqe           ;What does this do again?
+cdqe           ;What does this do again?
+;cmp r13, 50     ;This works better than comparing rax to 0
 cmp rax, 0      ;I think this tests for the CTRL-D input, unlike the notes,
                 ;negative one does not seem to work but zero does
 je exit_program ;If 0 is in rax then exit the program, if not then continue
@@ -73,7 +74,6 @@ cqo
 idiv r15        ;dividing this way gives the mean
 mov r8, rax     ;r8 holds the quotient which is total value dividied by
                 ;the number of integers that I scanned
-
 mov rax, 0
 mov rdi, print_mean
 mov rsi, r8
@@ -85,11 +85,16 @@ call printf
 
 push qword 0
 mov rax, 0
-mov rdi, string_f
+mov rdi, char_f
 mov rsi, rsp
 call scanf
 mov r9, [rsp]
 pop rax
+
+mov rax, 0
+mov rdi, string_confirmation
+mov rsi, r9
+call printf
 
 ;mov rax, 0
 ;mov rdi, print_value     ;uncomment this block of code to
