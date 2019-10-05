@@ -96,7 +96,7 @@ call printf
 
 push qword 0    ;This block scans a character into register r9
 mov rax, 0      ;(y or n)
-mov rdi, integer_f
+mov rdi, char_f
 mov rsi, rsp
 call scanf
 mov r13, [rsp]
@@ -107,8 +107,8 @@ pop rax
 ;mov rsi, r13
 ;call printf
 
-cmp r13, 5
-jg loopagain
+cmp r13, 'y'
+je loopagain
 mov rax, 0
 mov rdi, failed_conditional
 call printf
