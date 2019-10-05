@@ -1,5 +1,7 @@
 extern printf
 extern scanf
+extern clearerr
+extern stdin
 global control_d
 
 segment .data
@@ -14,8 +16,13 @@ prompt2 db "After the last input press Control+D.", 10, 0
 confirmation db "You entered %d", 10, 0
 sum_result db "The sum of these two integers is %d.", 10, 0
 product_result db "The product of these two integers is %d.", 10, 0
+failed_conditional db "You have selected to not repeat the program", 10, 0
+passed_conditional db "You have chosen to repeat the program", 10, 0
 integer_f db "%d", 0
 char_f db "%c", 0
+string_f db "%s", 0
+yes db "y", 0
+no db "n", 0
 string_confirmation db "Your char was: %c", 10, 0
 print_value db "The value that lies in this register is: %d", 10, 0
 print_total_numbers db "The amount of numbers entered was: %d", 10, 0
@@ -69,6 +76,10 @@ jmp loop        ;Perform actions above then jump to loop:
 
 exit_program:   ;Jumping out of the loop
 
+mov rax, 0      ;This block of code clears the stream state
+mov rdi, [stdin];Needed to extern stdin & clearerr
+call clearerr
+
 mov rax, r14
 cqo
 idiv r15        ;dividing this way gives the mean
@@ -83,18 +94,34 @@ mov rax, 0
 mov rdi, rerun
 call printf
 
-push qword 0
-mov rax, 0
-mov rdi, char_f
+push qword 0    ;This block scans a character into register r9
+mov rax, 0      ;(y or n)
+mov rdi, integer_f
 mov rsi, rsp
 call scanf
-mov r9, [rsp]
+mov r13, [rsp]
 pop rax
 
+;mov rax, 0
+;mov rdi, print_value
+;mov rsi, r13
+;call printf
+
+cmp r13, 5
+jg loopagain
 mov rax, 0
-mov rdi, string_confirmation
-mov rsi, r9
+mov rdi, failed_conditional
 call printf
+jmp continue
+
+loopagain:
+mov rax, 0
+mov rdi, passed_conditional
+call printf
+
+continue:
+
+
 
 ;mov rax, 0
 ;mov rdi, print_value     ;uncomment this block of code to
