@@ -1,0 +1,279 @@
+     1                                  ;****************************************************************************************************************************
+     2                                  ;Program name: "Simple Parameter Passingn".  This program demonstrates some simple cases of passing data from an X86 moodule*
+     3                                  ;to an C module and also to a C++ module. Copyright (C) 2019 Floyd Holliday                                                 *
+     4                                  ;This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License  *
+     5                                  ;version 3 as published by the Free Software Foundation.                                                                    *
+     6                                  ;This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied         *
+     7                                  ;warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.     *
+     8                                  ;A copy of the GNU General Public License v3 is available here:  <https:;www.gnu.org/licenses/>.                            *
+     9                                  ;****************************************************************************************************************************
+    10                                  
+    11                                  
+    12                                  ;========1=========2=========3=========4=========5=========6=========7=========8=========9=========0=========1=========2=========3**
+    13                                  ;
+    14                                  ;Author information
+    15                                  ;  Author name: Guadalupe Garcia
+    16                                  ;  Author email: gg@hotmail.com
+    17                                  ;
+    18                                  ;Program name: Simple Parameter Passing
+    19                                  ;Programming languages: C (driver), X86 (main algorithm), C++ (swap), C (reverse) 
+    20                                  ;Date program began: February 15, 2019
+    21                                  ;Date of last update: February 16, 2019
+    22                                  ;Files in this program:
+    23                                  ;Status: Done.  No more updates will be performed.
+    24                                  
+    25                                  ;Purpose: This program has only an academic purpose, namely: discover how X86 can call programs with source codes in C and C++, 
+    26                                  ;and correctly pass data between caller and called modules.
+    27                                  
+    28                                  ;This file
+    29                                  ;   File name: discover.asm
+    30                                  ;   Language: X86
+    31                                  ;   Max page width: 132 columns
+    32                                  ;   Assemble: nasm -f elf64 -l discover.lis -o discov.o discover.asm
+    33                                  
+    34                                  
+    35                                  ;===== Begin code area ==============================================================================================================
+    36                                  ;;%include "debug.inc"                                      ;Debug tool not used in this program.
+    37                                  extern printf
+    38                                  extern malloc
+    39                                  extern summation
+    40                                  extern swap
+    41                                  
+    42                                  global discovery
+    43                                  
+    44                                  segment .data
+    45                                  
+    46 00000000 4659493A2054686520-     welcome db "FYI: The module discovery, writtten in X86, has begun executing.", 10, "No parameters were received by this asm module", 10, 0
+    46 00000009 6D6F64756C65206469-
+    46 00000012 73636F766572792C20-
+    46 0000001B 777269747474656E20-
+    46 00000024 696E205838362C2068-
+    46 0000002D 617320626567756E20-
+    46 00000036 657865637574696E67-
+    46 0000003F 2E0A4E6F2070617261-
+    46 00000048 6D6574657273207765-
+    46 00000051 726520726563656976-
+    46 0000005A 656420627920746869-
+    46 00000063 732061736D206D6F64-
+    46 0000006C 756C650A00         
+    47                                  
+    48 00000071 41667465722063616C-     swapmessage db "After calling swap the array now has changed values.",10,0
+    48 0000007A 6C696E672073776170-
+    48 00000083 207468652061727261-
+    48 0000008C 79206E6F7720686173-
+    48 00000095 206368616E67656420-
+    48 0000009E 76616C7565732E0A00 
+    49                                  
+    50 000000A7 546865206172726179-     numbers_in_the_array db "The array contains:",10,"%ld",10,"%ld",10,"%ld",10,"%ld",10,"%ld",10,"%ld",10,"%ld",10,0
+    50 000000B0 20636F6E7461696E73-
+    50 000000B9 3A0A256C640A256C64-
+    50 000000C2 0A256C640A256C640A-
+    50 000000CB 256C640A256C640A25-
+    50 000000D4 6C640A00           
+    51                                  
+    52 000000D8 5468652073756D206F-     sumformat db "The sum of some numbers in the array is %ld",10,0
+    52 000000E1 6620736F6D65206E75-
+    52 000000EA 6D6265727320696E20-
+    52 000000F3 746865206172726179-
+    52 000000FC 20697320256C640A00 
+    53                                  
+    54 00000105 546869732058383620-     goodbye db "This X86 module will now gently terminate by re-setting rbp to the  bottom of the activation record of the caller",
+    54 0000010E 6D6F64756C65207769-
+    54 00000117 6C6C206E6F77206765-
+    54 00000120 6E746C79207465726D-
+    54 00000129 696E61746520627920-
+    54 00000132 72652D73657474696E-
+    54 0000013B 672072627020746F20-
+    54 00000144 7468652020626F7474-
+    54 0000014D 6F6D206F6620746865-
+    54 00000156 206163746976617469-
+    54 0000015F 6F6E207265636F7264-
+    54 00000168 206F66207468652063-
+    54 00000171 616C6C6572         
+    55 00000176 0A616E64206175746F-             db 10, "and automatically popping rsp exactly once.  The popped value goes into rip.", 10, 0
+    55 0000017F 6D61746963616C6C79-
+    55 00000188 20706F7070696E6720-
+    55 00000191 727370206578616374-
+    55 0000019A 6C79206F6E63652E20-
+    55 000001A3 2054686520706F7070-
+    55 000001AC 65642076616C756520-
+    55 000001B5 676F657320696E746F-
+    55 000001BE 207269702E0A00     
+    56                                  
+    57                                  segment .bss  ; Reserved for uninitialized arrays
+    58                                  ;Empty
+    59                                  
+    60                                  segment .text
+    61                                  
+    62                                  discovery:
+    63                                  
+    64                                  ;===== Backup all the GPRs ========================================================================================================
+    65 00000000 55                      push rbp                                                    ;Backup the base pointer
+    66 00000001 4889E5                  mov  rbp,rsp                                                ;Advance the base pointer to start of the current stack frame
+    67 00000004 57                      push rdi                                                    ;Backup rdi
+    68 00000005 56                      push rsi                                                    ;Backup rsi
+    69 00000006 52                      push rdx                                                    ;Backup rdx
+    70 00000007 51                      push rcx                                                    ;Backup rcx
+    71 00000008 4150                    push r8                                                     ;Backup r8
+    72 0000000A 4151                    push r9                                                     ;Backup r9
+    73 0000000C 4152                    push r10                                                    ;Backup r10
+    74 0000000E 4153                    push r11                                                    ;Backup r11: printf often changes r11
+    75 00000010 4154                    push r12                                                    ;Backup r12
+    76 00000012 4155                    push r13                                                    ;Backup r13
+    77 00000014 4156                    push r14                                                    ;Backup r14
+    78 00000016 4157                    push r15                                                    ;Backup r15
+    79 00000018 53                      push rbx                                                    ;Backup rbx
+    80 00000019 9C                      pushf                                                       ;Backup rflags
+    81                                  ;Registers rax, rip, and rsp are usually not backed up.
+    82                                  
+    83                                  ;===== Output initial messages ====================================================================================================
+    84                                  
+    85 0000001A B800000000              mov rax, 0
+    86 0000001F 48BF-                   mov rdi, welcome
+    86 00000021 [0000000000000000] 
+    87 00000029 E8(00000000)            call printf
+    88                                  
+    89                                  
+    90                                  ;===== Create an array with slots for seven 8-byte numbers ========================================================================
+    91                                  
+    92 0000002E BF38000000              mov rdi, 56                                                 ;A single unsigned int is passed to malloc
+    93 00000033 E8(00000000)            call malloc                                                 ;Create dynamically an array of 7 quadwords.  The name of the array is r15.
+    94 00000038 4989C7                  mov r15, rax                                                ;Save the pointer returned by malloc in a safe place.
+    95                                  
+    96                                  
+    97                                  ;===== Enter some numeric values in the new array ================================================================================
+    98                                  
+    99 0000003B 49C7070E000000          mov qword [r15+8*0], 14
+   100 00000042 49C7470807000000        mov qword [r15+8*1], 7
+   101 0000004A 49C7471017000000        mov qword [r15+8*2], 23
+   102 00000052 49C74718FFFFFFFF        mov qword [r15+8*3], -1
+   103 0000005A 49C74720FEFFFFFF        mov qword [r15+8*4], 0xFFFFFFFFFFFFFFFE
+   104 00000062 49C747280A000000        mov qword [r15+8*5], 0xA
+   105 0000006A 49C74730FBFFFFFF        mov qword [r15+8*6], -5
+   106                                  ;That is nice.  r15 is an array containing 7 rather random odd numbers
+   107                                  
+   108                                  
+   109                                  ;===== Display the contents of the array ==========================================================================================
+   110                                  
+   111                                  
+   112 00000072 B800000000              mov rax, 0
+   113 00000077 48BF-                   mov rdi, numbers_in_the_array
+   113 00000079 [A700000000000000] 
+   114 00000081 498B37                  mov rsi, [r15+8*0]
+   115 00000084 498B5708                mov rdx, [r15+8*1]
+   116 00000088 498B4F10                mov rcx, [r15+8*2]
+   117 0000008C 4D8B4718                mov r8,  [r15+8*3]
+   118 00000090 4D8B4F20                mov r9,  [r15+8*4]
+   119 00000094 498B4730                mov rax, [r15+8*6]
+   120 00000098 50                      push rax
+   121 00000099 498B4728                mov rax, [r15+8*5]
+   122 0000009D 50                      push rax
+   123 0000009E E8(00000000)            call printf
+   124 000000A3 58                      pop rax
+   125 000000A4 58                      pop rax
+   126                                  
+   127                                  
+   128                                  ;===== Call the swap function that lives in another file ==========================================================================
+   129                                  
+   130                                  ;Pass to the called function the addresses of the second and fourth slots in the array.
+   131                                  ;We are not passing the entire array to the called function.
+   132                                  ;We are not passing the contents of the first and third slots 
+   133                                  ;We are passing exactly the addresses of the second and fourth slots of the array.
+   134                                  ;Address of first slot:      r15+8*0
+   135                                  ;Address of the second slot: r15+8*1
+   136                                  ;Address of the third slot:  r15+8*2
+   137                                  ;Address of the fourth slot: r15+8*3
+   138                                  ;Address of the fifth slot:  r15+8*4
+   139                                  ;Address of the sixth slot:  r15+8*5
+   140                                  ;Address of the seventh slot:r15+8*6
+   141                                  ;We send to the called function the two numbers: r15+8*1 and r15+8*3.
+   142                                  
+   143                                  ;Begin set up for the function call; exchange the stored values at index 2 and index 4.
+   144 000000A5 B800000000              mov rax, 0
+   145 000000AA 4C89FF                  mov rdi, r15
+   146 000000AD 4883C708                add rdi, 8
+   147 000000B1 4C89FE                  mov rsi, r15
+   148 000000B4 4883C618                add rsi, 24
+   149 000000B8 E8(00000000)            call swap
+   150                                  
+   151                                  
+   152                                  ;===== Display the contents of the array ==========================================================================================
+   153                                  
+   154 000000BD B800000000              mov rax,0
+   155 000000C2 48BF-                   mov rdi,swapmessage
+   155 000000C4 [7100000000000000] 
+   156 000000CC E8(00000000)            call printf
+   157                                  
+   158 000000D1 B800000000              mov rax, 0
+   159 000000D6 48BF-                   mov rdi, numbers_in_the_array
+   159 000000D8 [A700000000000000] 
+   160 000000E0 498B37                  mov rsi, [r15+8*0]
+   161 000000E3 498B5708                mov rdx, [r15+8*1]
+   162 000000E7 498B4F10                mov rcx, [r15+8*2]
+   163 000000EB 4D8B4718                mov r8,  [r15+8*3]
+   164 000000EF 4D8B4F20                mov r9,  [r15+8*4]
+   165 000000F3 498B4730                mov rax, [r15+8*6]
+   166 000000F7 50                      push rax
+   167 000000F8 498B4728                mov rax, [r15+8*5]
+   168 000000FC 50                      push rax
+   169 000000FD E8(00000000)            call printf
+   170 00000102 58                      pop rax
+   171 00000103 58                      pop rax
+   172                                  
+   173                                  
+   174                                  ;===== Call an external function that will sum the first n numbers in an integer array ===========================================
+   175                                  
+   176                                  ;Set up the parameters for calling the summation function
+   177                                  ;Prototype:  long summation(long [],long size)
+   178 00000104 B800000000              mov rax, 0                                                  ;rax holds the number of xmm registers that will be passsed to the called function
+   179 00000109 4C89FF                  mov rdi, r15                                                ;The pointer to the array is now in rdi
+   180 0000010C BE04000000              mov rsi, 4                                                  ;4 = first 4 numbers will be summed
+   181 00000111 E8(00000000)            call summation
+   182 00000116 4989C6                  mov r14, rax                                                ;Save the number returned by summation in a safe place
+   183                                  
+   184                                  
+   185                                  ;===== Show the summation number ==================================================================================================
+   186                                  
+   187                                  ;Set up the parameters for the function call
+   188 00000119 B800000000              mov rax, 0                                                  ;rax holds the number of xmm registers that will be passsed to the called function
+   189 0000011E 48BF-                   mov rdi, sumformat                                          ;"The sum of some numbers in the array is %ld\n"
+   189 00000120 [D800000000000000] 
+   190 00000128 4C89F6                  mov rsi, r14                                                ;The sum is now in rdx waiting to be passed to printf
+   191 0000012B E8(00000000)            call printf
+   192                                  
+   193                                  
+   194                                  ;===== Time to exit from this X86 module =========================================================================================
+   195                                  
+   196 00000130 B800000000              mov rax, 0
+   197 00000135 48BF-                   mov rdi, goodbye                                            ;"This X86 module will now gently terminate by re-setting rbp to ..."
+   197 00000137 [0501000000000000] 
+   198 0000013F E8(00000000)            call printf
+   199                                  
+   200                                  
+   201                                  ;===== Select a value to send to the caller ======================================================================================
+   202                                  
+   203                                  ;What shall we send to the caller?  -99?   +100?   Let's send the starting address of the array.
+   204                                  
+   205 00000144 4C89F8                  mov rax, r15
+   206                                  
+   207                                  
+   208                                  ;===== Restore original values to integer registers ===============================================================================
+   209 00000147 9D                      popf                                                        ;Restore rflags
+   210 00000148 5B                      pop rbx                                                     ;Restore rbx
+   211 00000149 415F                    pop r15                                                     ;Restore r15
+   212 0000014B 415E                    pop r14                                                     ;Restore r14
+   213 0000014D 415D                    pop r13                                                     ;Restore r13
+   214 0000014F 415C                    pop r12                                                     ;Restore r12
+   215 00000151 415B                    pop r11                                                     ;Restore r11
+   216 00000153 415A                    pop r10                                                     ;Restore r10
+   217 00000155 4159                    pop r9                                                      ;Restore r9
+   218 00000157 4158                    pop r8                                                      ;Restore r8
+   219 00000159 59                      pop rcx                                                     ;Restore rcx
+   220 0000015A 5A                      pop rdx                                                     ;Restore rdx
+   221 0000015B 5E                      pop rsi                                                     ;Restore rsi
+   222 0000015C 5F                      pop rdi                                                     ;Restore rdi
+   223 0000015D 5D                      pop rbp                                                     ;Restore rbp
+   224                                  
+   225 0000015E C3                      ret
+   226                                  
+   227                                  

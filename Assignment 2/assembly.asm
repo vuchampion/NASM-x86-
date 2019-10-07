@@ -12,6 +12,9 @@ two_numbers db "The two numbers we have are: %ld & %ld", 10, 0
 confirmation db "The number you have entered is: %ld", 10, 0
 print_register db "This register contains the value: %ld", 10, 0
 division_result db "The quotient is: %ld The remainder is: %ld", 10, 0
+positive_msg db "The remainder is positive", 10, 0
+negative_msg db "The remainder is negative", 10, 0
+goodbye db "Goodbye", 10, 0
 
 segment .bss
 
@@ -53,13 +56,13 @@ mov rax, 0
 mov rdi, integer_format
 mov rsi, rsp
 call scanf
-mov r12, [rsp]
+mov r14, [rsp]
 pop rax
 pop rax
 
 mov rax, 0
 mov rdi, print_register
-mov rsi, r12
+mov rsi, r14
 call printf
 
 mov rax, 0
@@ -72,32 +75,32 @@ mov rax, 0
 mov rdi, integer_format
 mov rsi, rsp
 call scanf
-mov r13, [rsp]
+mov r15, [rsp]
 pop rax
 pop rax
 
 mov rax, 0
 mov rdi, print_register
-mov rsi, r13
+mov rsi, r15
 call printf
 
 mov rax, 0
 mov rdi, two_numbers
-mov rsi, r12
-mov rdx, r13
+mov rsi, r14
+mov rdx, r15
 call printf
 
-;mov rax, r14
-;cqo
-;idiv r15
-;mov r13, rax
-;mov r12, rdx
+mov rax, r14
+cqo
+idiv r15
+mov r13, rax
+mov r12, rdx
 
-;mov rax, 0
-;mov rdi, division_result
-;mov rsi, r13
-;mov rdx, r12
-;call printf
+mov rax, 0
+mov rdi, division_result
+mov rsi, r13
+mov rdx, r12
+call printf
 
 popf                                                        ;Restore rflags
 pop        r15                                              ;Restore r15

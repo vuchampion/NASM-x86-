@@ -1,181 +1,224 @@
      1                                  extern printf
      2                                  extern scanf
-     3                                  extern getchar
-     4                                  global control_d
-     5                                  
-     6                                  segment .data
-     7                                  
-     8 00000000 57656C636F6D652C20-     intro_message db "Welcome, this program was built by Darren Vu", 10, 0
-     8 00000009 746869732070726F67-
-     8 00000012 72616D207761732062-
-     8 0000001B 75696C742062792044-
-     8 00000024 617272656E2056750A-
-     8 0000002D 00                 
-     9 0000002E 4C657420757320636F-     intro_message2 db "Let us compute using integers only. ", 0
-     9 00000037 6D7075746520757369-
-     9 00000040 6E6720696E74656765-
-     9 00000049 7273206F6E6C792E20-
-     9 00000052 00                 
-    10 00000053 546869732069732061-     random_message db "This is a test message.", 10, 0
-    10 0000005C 2074657374206D6573-
-    10 00000065 736167652E0A00     
-    11 0000006C 4920686F706520796F-     goodbye_message db "I hope you've like this program.", 10, 0
-    11 00000075 75277665206C696B65-
-    11 0000007E 20746869732070726F-
-    11 00000087 6772616D2E0A00     
-    12 0000008E 54686520696E746567-     end_message db "The integer 5 will be returned to the calling program", 10, 0
-    12 00000097 657220352077696C6C-
-    12 000000A0 206265207265747572-
-    12 000000A9 6E656420746F207468-
-    12 000000B2 652063616C6C696E67-
-    12 000000BB 2070726F6772616D0A-
-    12 000000C4 00                 
-    13 000000C5 456E74657220612073-     prompt db "Enter a sequence of long integers seperated by white space. ", 0
-    13 000000CE 657175656E6365206F-
-    13 000000D7 66206C6F6E6720696E-
-    13 000000E0 746567657273207365-
-    13 000000E9 706572617465642062-
-    13 000000F2 792077686974652073-
-    13 000000FB 706163652E2000     
-    14 00000102 416674657220746865-     prompt2 db "After the last input press Control+D.", 10, 0
-    14 0000010B 206C61737420696E70-
-    14 00000114 757420707265737320-
-    14 0000011D 436F6E74726F6C2B44-
-    14 00000126 2E0A00             
-    15 00000129 596F7520656E746572-     confirmation db "You entered %d", 10, 0
-    15 00000132 65642025640A00     
-    16 00000139 5468652073756D206F-     sum_result db "The sum of these two integers is %d.", 10, 0
-    16 00000142 662074686573652074-
-    16 0000014B 776F20696E74656765-
-    16 00000154 72732069732025642E-
-    16 0000015D 0A00               
-    17 0000015F 5468652070726F6475-     product_result db "The product of these two integers is %d.", 10, 0
-    17 00000168 6374206F6620746865-
-    17 00000171 73652074776F20696E-
-    17 0000017A 746567657273206973-
-    17 00000183 2025642E0A00       
-    18 00000189 256400                  integer_f db "%d", 0
-    19 0000018C 256300                  char_f db "%c", 0
-    20 0000018F 596F75722063686172-     string_confirmation db "Your char was: %c", 10, 0
-    20 00000198 207761733A2025630A-
-    20 000001A1 00                 
-    21 000001A2 5468652076616C7565-     print_value db "The value that lies in this register is: %d", 10, 0
-    21 000001AB 2074686174206C6965-
-    21 000001B4 7320696E2074686973-
-    21 000001BD 207265676973746572-
-    21 000001C6 2069733A2025640A00 
-    22 000001CF 54686520616D6F756E-     print_total_numbers db "The amount of numbers entered was: %d", 10, 0
-    22 000001D8 74206F66206E756D62-
-    22 000001E1 65727320656E746572-
-    22 000001EA 6564207761733A2025-
-    22 000001F3 640A00             
-    23 000001F6 54686520696E746567-     print_mean db "The integer mean was: %d", 10, 0
-    23 000001FF 6572206D65616E2077-
-    23 00000208 61733A2025640A00   
-    24 00000210 446F20796F75206861-     rerun db "Do you have more sets of integers to process (y or n)? ",10, 0
-    24 00000219 7665206D6F72652073-
-    24 00000222 657473206F6620696E-
-    24 0000022B 74656765727320746F-
-    24 00000234 2070726F6365737320-
-    24 0000023D 2879206F72206E293F-
-    24 00000246 200A00             
-    25                                  
-    26                                  segment .bss
-    27                                  
-    28                                  segment .text
-    29                                  
-    30                                  control_d:
+     3                                  extern clearerr
+     4                                  extern stdin
+     5                                  global control_d
+     6                                  
+     7                                  segment .data
+     8                                  
+     9 00000000 57656C636F6D652C20-     intro_message db "Welcome, this program was built by Darren Vu", 10, 0
+     9 00000009 746869732070726F67-
+     9 00000012 72616D207761732062-
+     9 0000001B 75696C742062792044-
+     9 00000024 617272656E2056750A-
+     9 0000002D 00                 
+    10 0000002E 4C657420757320636F-     intro_message2 db "Let us compute using integers only. ", 0
+    10 00000037 6D7075746520757369-
+    10 00000040 6E6720696E74656765-
+    10 00000049 7273206F6E6C792E20-
+    10 00000052 00                 
+    11 00000053 546869732069732061-     random_message db "This is a test message.", 10, 0
+    11 0000005C 2074657374206D6573-
+    11 00000065 736167652E0A00     
+    12 0000006C 4920686F706520796F-     goodbye_message db "I hope you've like this program.", 10, 0
+    12 00000075 75277665206C696B65-
+    12 0000007E 20746869732070726F-
+    12 00000087 6772616D2E0A00     
+    13 0000008E 54686520696E746567-     end_message db "The integer 5 will be returned to the calling program", 10, 0
+    13 00000097 657220352077696C6C-
+    13 000000A0 206265207265747572-
+    13 000000A9 6E656420746F207468-
+    13 000000B2 652063616C6C696E67-
+    13 000000BB 2070726F6772616D0A-
+    13 000000C4 00                 
+    14 000000C5 456E74657220612073-     prompt db "Enter a sequence of long integers seperated by white space. ", 0
+    14 000000CE 657175656E6365206F-
+    14 000000D7 66206C6F6E6720696E-
+    14 000000E0 746567657273207365-
+    14 000000E9 706572617465642062-
+    14 000000F2 792077686974652073-
+    14 000000FB 706163652E2000     
+    15 00000102 416674657220746865-     prompt2 db "After the last input press Control+D.", 10, 0
+    15 0000010B 206C61737420696E70-
+    15 00000114 757420707265737320-
+    15 0000011D 436F6E74726F6C2B44-
+    15 00000126 2E0A00             
+    16 00000129 596F7520656E746572-     confirmation db "You entered %d", 10, 0
+    16 00000132 65642025640A00     
+    17 00000139 5468652073756D206F-     sum_result db "The sum of these two integers is %d.", 10, 0
+    17 00000142 662074686573652074-
+    17 0000014B 776F20696E74656765-
+    17 00000154 72732069732025642E-
+    17 0000015D 0A00               
+    18 0000015F 5468652070726F6475-     product_result db "The product of these two integers is %d.", 10, 0
+    18 00000168 6374206F6620746865-
+    18 00000171 73652074776F20696E-
+    18 0000017A 746567657273206973-
+    18 00000183 2025642E0A00       
+    19 00000189 596F75206861766520-     failed_conditional db "You have selected to not repeat the program", 10, 0
+    19 00000192 73656C656374656420-
+    19 0000019B 746F206E6F74207265-
+    19 000001A4 706561742074686520-
+    19 000001AD 70726F6772616D0A00 
+    20 000001B6 596F75206861766520-     passed_conditional db "You have chosen to repeat the program", 10, 0
+    20 000001BF 63686F73656E20746F-
+    20 000001C8 207265706561742074-
+    20 000001D1 68652070726F677261-
+    20 000001DA 6D0A00             
+    21 000001DD 256400                  integer_f db "%d", 0
+    22 000001E0 256300                  char_f db "%c", 0
+    23 000001E3 257300                  string_f db "%s", 0
+    24 000001E6 7900                    yes db "y", 0
+    25 000001E8 6E00                    no db "n", 0
+    26 000001EA 596F75722063686172-     string_confirmation db "Your char was: %c", 10, 0
+    26 000001F3 207761733A2025630A-
+    26 000001FC 00                 
+    27 000001FD 5468652076616C7565-     print_value db "The value that lies in this register is: %d", 10, 0
+    27 00000206 2074686174206C6965-
+    27 0000020F 7320696E2074686973-
+    27 00000218 207265676973746572-
+    27 00000221 2069733A2025640A00 
+    28 0000022A 54686520616D6F756E-     print_total_numbers db "The amount of numbers entered was: %d", 10, 0
+    28 00000233 74206F66206E756D62-
+    28 0000023C 65727320656E746572-
+    28 00000245 6564207761733A2025-
+    28 0000024E 640A00             
+    29 00000251 54686520696E746567-     print_mean db "The integer mean was: %d", 10, 0
+    29 0000025A 6572206D65616E2077-
+    29 00000263 61733A2025640A00   
+    30 0000026B 446F20796F75206861-     rerun db "Do you have more sets of integers to process (y or n)? ",10, 0
+    30 00000274 7665206D6F72652073-
+    30 0000027D 657473206F6620696E-
+    30 00000286 74656765727320746F-
+    30 0000028F 2070726F6365737320-
+    30 00000298 2879206F72206E293F-
+    30 000002A1 200A00             
     31                                  
-    32 00000000 B800000000              mov rax, 0
-    33 00000005 48BF-                   mov rdi, intro_message
-    33 00000007 [0000000000000000] 
-    34 0000000F E8(00000000)            call printf
+    32                                  segment .bss
+    33                                  
+    34                                  segment .text
     35                                  
-    36 00000014 B800000000              mov rax, 0
-    37 00000019 48BF-                   mov rdi, intro_message2
-    37 0000001B [2E00000000000000] 
-    38 00000023 E8(00000000)            call printf
-    39                                  
-    40 00000028 B800000000              mov rax, 0
-    41 0000002D 48BF-                   mov rdi, prompt
-    41 0000002F [C500000000000000] 
-    42 00000037 E8(00000000)            call printf
-    43                                  
-    44 0000003C B800000000              mov rax, 0
-    45 00000041 48BF-                   mov rdi, prompt2
-    45 00000043 [0201000000000000] 
-    46 0000004B E8(00000000)            call printf
-    47                                  
-    48 00000050 41BF00000000            mov r15, 0      ;Initialize the loop-counter to zero
-    49 00000056 41BE00000000            mov r14, 0      ;Clear whatever lies in register r14
-    50 0000005C 41BD00000000            mov r13, 0
-    51                                  
-    52                                  loop:           ;Start the loop
-    53 00000062 6A00                    push qword 0    ;Scanf some integers
-    54 00000064 B800000000              mov rax, 0
-    55 00000069 48BF-                   mov rdi, integer_f
-    55 0000006B [8901000000000000] 
-    56 00000073 4889E6                  mov rsi, rsp
-    57 00000076 E8(00000000)            call scanf
-    58 0000007B 4C8B2C24                mov r13, [rsp]  ;Move the scanned value into register r13
-    59 0000007F 58                      pop rax
-    60                                  
-    61 00000080 4898                    cdqe           ;What does this do again?
-    62                                  ;cmp r13, 50     ;This works better than comparing rax to 0
-    63 00000082 4883F800                cmp rax, 0      ;I think this tests for the CTRL-D input, unlike the notes,
-    64                                                  ;negative one does not seem to work but zero does
-    65 00000086 7408                    je exit_program ;If 0 is in rax then exit the program, if not then continue
-    66 00000088 4D01EE                  add r14, r13    ;Add all scanned numbers into register r14, r14 holds the total
-    67 0000008B 49FFC7                  inc r15         ;One cycle equates to increasing r15 by one, in other words
-    68                                                  ;this is the amount of numbers we have scanf'd
-    69 0000008E EBD2                    jmp loop        ;Perform actions above then jump to loop:
-    70                                  
-    71                                  exit_program:   ;Jumping out of the loop
-    72                                  
-    73 00000090 58                      pop rax
-    74 00000091 58                      pop rax
-    75                                  
-    76 00000092 4C89F0                  mov rax, r14
-    77 00000095 4899                    cqo
-    78 00000097 49F7FF                  idiv r15        ;dividing this way gives the mean
-    79 0000009A 4989C0                  mov r8, rax     ;r8 holds the quotient which is total value dividied by
-    80                                                  ;the number of integers that I scanned
-    81 0000009D B800000000              mov rax, 0
-    82 000000A2 48BF-                   mov rdi, print_mean
-    82 000000A4 [F601000000000000] 
-    83 000000AC 4C89C6                  mov rsi, r8
-    84 000000AF E8(00000000)            call printf
-    85                                  
-    86 000000B4 B800000000              mov rax, 0
-    87 000000B9 48BF-                   mov rdi, rerun
-    87 000000BB [1002000000000000] 
-    88 000000C3 E8(00000000)            call printf
+    36                                  control_d:
+    37                                  
+    38 00000000 B800000000              mov rax, 0
+    39 00000005 48BF-                   mov rdi, intro_message
+    39 00000007 [0000000000000000] 
+    40 0000000F E8(00000000)            call printf
+    41                                  
+    42 00000014 B800000000              mov rax, 0
+    43 00000019 48BF-                   mov rdi, intro_message2
+    43 0000001B [2E00000000000000] 
+    44 00000023 E8(00000000)            call printf
+    45                                  
+    46 00000028 B800000000              mov rax, 0
+    47 0000002D 48BF-                   mov rdi, prompt
+    47 0000002F [C500000000000000] 
+    48 00000037 E8(00000000)            call printf
+    49                                  
+    50 0000003C B800000000              mov rax, 0
+    51 00000041 48BF-                   mov rdi, prompt2
+    51 00000043 [0201000000000000] 
+    52 0000004B E8(00000000)            call printf
+    53                                  
+    54 00000050 41BF00000000            mov r15, 0      ;Initialize the loop-counter to zero
+    55 00000056 41BE00000000            mov r14, 0      ;Clear whatever lies in register r14
+    56 0000005C 41BD00000000            mov r13, 0
+    57 00000062 41B800000000            mov r8, 0
+    58                                  
+    59                                  repeat:
+    60 00000068 B800000000              mov rax, 0
+    61 0000006D 48BF-                   mov rdi, prompt
+    61 0000006F [C500000000000000] 
+    62 00000077 E8(00000000)            call printf
+    63                                  
+    64 0000007C 41BF00000000            mov r15, 0      ;Initialize the loop-counter to zero
+    65 00000082 41BE00000000            mov r14, 0      ;Clear whatever lies in register r14
+    66 00000088 41BD00000000            mov r13, 0
+    67 0000008E 41B800000000            mov r8, 0
+    68                                  
+    69                                  loop:           ;Start the loop
+    70 00000094 6A00                    push qword 0    ;Scanf some integers
+    71 00000096 B800000000              mov rax, 0
+    72 0000009B 48BF-                   mov rdi, integer_f
+    72 0000009D [DD01000000000000] 
+    73 000000A5 4889E6                  mov rsi, rsp
+    74 000000A8 E8(00000000)            call scanf
+    75 000000AD 4C8B2C24                mov r13, [rsp]  ;Move the scanned value into register r13
+    76 000000B1 58                      pop rax
+    77                                  
+    78 000000B2 4898                    cdqe           ;What does this do again?
+    79                                  ;cmp r13, 50     ;This works better than comparing rax to 0
+    80 000000B4 4883F800                cmp rax, 0      ;I think this tests for the CTRL-D input, unlike the notes,
+    81                                                  ;negative one does not seem to work but zero does
+    82 000000B8 7408                    je exit_program ;If 0 is in rax then exit the program, if not then continue
+    83 000000BA 4D01EE                  add r14, r13    ;Add all scanned numbers into register r14, r14 holds the total
+    84 000000BD 49FFC7                  inc r15         ;One cycle equates to increasing r15 by one, in other words
+    85                                                  ;this is the amount of numbers we have scanf'd
+    86 000000C0 EBD2                    jmp loop        ;Perform actions above then jump to loop:
+    87                                  
+    88                                  exit_program:   ;Jumping out of the loop
     89                                  
-    90 000000C8 6A00                    push qword 0
-    91 000000CA B800000000              mov rax, 0
-    92 000000CF 48BF-                   mov rdi, char_f
-    92 000000D1 [8C01000000000000] 
-    93 000000D9 4889E6                  mov rsi, rsp
-    94 000000DC E8(00000000)            call scanf
-    95 000000E1 4C8B0C24                mov r9, [rsp]
-    96 000000E5 58                      pop rax
-    97                                  
-    98 000000E6 B800000000              mov rax, 0
-    99 000000EB 48BF-                   mov rdi, string_confirmation
-    99 000000ED [8F01000000000000] 
-   100 000000F5 4C89CE                  mov rsi, r9
-   101 000000F8 E8(00000000)            call printf
-   102                                  
-   103                                  ;mov rax, 0
-   104                                  ;mov rdi, print_value     ;uncomment this block of code to
-   105                                  ;mov rsi, r14             ;print the value of the sum of all
-   106                                  ;call printf              ;scanned numbers
+    90 000000C2 B800000000              mov rax, 0      ;This block of code clears the stream state
+    91 000000C7 488B3C25[00000000]      mov rdi, [stdin];Needed to extern stdin & clearerr
+    92 000000CF E8(00000000)            call clearerr
+    93                                  
+    94 000000D4 4C89F0                  mov rax, r14
+    95 000000D7 4899                    cqo
+    96 000000D9 49F7FF                  idiv r15        ;dividing this way gives the mean
+    97 000000DC 4989C0                  mov r8, rax     ;r8 holds the quotient which is total value dividied by
+    98                                                  ;the number of integers that I scanned
+    99 000000DF B800000000              mov rax, 0
+   100 000000E4 48BF-                   mov rdi, print_mean
+   100 000000E6 [5102000000000000] 
+   101 000000EE 4C89C6                  mov rsi, r8
+   102 000000F1 E8(00000000)            call printf
+   103                                  
+   104 000000F6 B800000000              mov rax, 0
+   105 000000FB 48BF-                   mov rdi, rerun
+   105 000000FD [6B02000000000000] 
+   106 00000105 E8(00000000)            call printf
    107                                  
-   108                                  ;mov rax, 0
-   109                                  ;mov rdi, print_total_numbers     ;uncomment this block of code to
-   110                                  ;mov rsi, r15                     ;print out the amounf of scanned numbers
-   111                                  ;call printf
-   112                                  
-   113 000000FD B800000000              mov rax, 0
-   114                                  
-   115 00000102 C3                      ret
+   108 0000010A 6A00                    push qword 0    ;This block scans a character into register r9
+   109 0000010C B800000000              mov rax, 0      ;(y or n)
+   110 00000111 48BF-                   mov rdi, char_f
+   110 00000113 [E001000000000000] 
+   111 0000011B 4889E6                  mov rsi, rsp
+   112 0000011E E8(00000000)            call scanf
+   113 00000123 4C8B2C24                mov r13, [rsp]
+   114 00000127 58                      pop rax
+   115                                  
+   116                                  ;mov rax, 0
+   117                                  ;mov rdi, print_value
+   118                                  ;mov rsi, r13
+   119                                  ;call printf
+   120                                  
+   121 00000128 4983FD79                cmp r13, 'y'
+   122 0000012C 0F8436FFFFFF            je repeat
+   123 00000132 B800000000              mov rax, 0
+   124 00000137 48BF-                   mov rdi, failed_conditional
+   124 00000139 [8901000000000000] 
+   125 00000141 E8(00000000)            call printf
+   126 00000146 EB00                    jmp continue
+   127                                  
+   128                                  ;loopagain:
+   129                                  ;mov rax, 0
+   130                                  ;mov rdi, passed_conditional
+   131                                  ;call printf
+   132                                  
+   133                                  continue:
+   134                                  
+   135                                  
+   136                                  
+   137                                  ;mov rax, 0
+   138                                  ;mov rdi, print_value     ;uncomment this block of code to
+   139                                  ;mov rsi, r14             ;print the value of the sum of all
+   140                                  ;call printf              ;scanned numbers
+   141                                  
+   142                                  ;mov rax, 0
+   143                                  ;mov rdi, print_total_numbers     ;uncomment this block of code to
+   144                                  ;mov rsi, r15                     ;print out the amounf of scanned numbers
+   145                                  ;call printf
+   146                                  
+   147 00000148 B800000000              mov rax, 0
+   148                                  
+   149 0000014D C3                      ret

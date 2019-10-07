@@ -40,117 +40,139 @@
     14 00000108 6C6420546865207265-
     14 00000111 6D61696E6465722069-
     14 0000011A 733A20256C640A00   
-    15                                  
-    16                                  segment .bss
-    17                                  
-    18                                  segment .text
-    19                                  
-    20                                  assignment2:
-    21 00000000 55                      push       rbp                                              ;Save a copy of the stack base pointer
-    22 00000001 4889E5                  mov        rbp, rsp                                         ;We do this in order to be 100% compatible with C and C++.
-    23 00000004 53                      push       rbx                                              ;Back up rbx
-    24 00000005 51                      push       rcx                                              ;Back up rcx
-    25 00000006 52                      push       rdx                                              ;Back up rdx
-    26 00000007 56                      push       rsi                                              ;Back up rsi
-    27 00000008 57                      push       rdi                                              ;Back up rdi
-    28 00000009 4150                    push       r8                                               ;Back up r8
-    29 0000000B 4151                    push       r9                                               ;Back up r9
-    30 0000000D 4152                    push       r10                                              ;Back up r10
-    31 0000000F 4153                    push       r11                                              ;Back up r11
-    32 00000011 4154                    push       r12                                              ;Back up r12
-    33 00000013 4155                    push       r13                                              ;Back up r13
-    34 00000015 4156                    push       r14                                              ;Back up r14
-    35 00000017 4157                    push       r15                                              ;Back up r15
-    36 00000019 9C                      pushf
-    37                                  
-    38                                  ;registers r10 and r11 do not function properly
-    39                                  ;registers r8 and r9 also do not function properly                                                     ;Back up rflags
+    15 00000122 5468652072656D6169-     positive_msg db "The remainder is positive", 10, 0
+    15 0000012B 6E6465722069732070-
+    15 00000134 6F7369746976650A00 
+    16 0000013D 5468652072656D6169-     negative_msg db "The remainder is negative", 10, 0
+    16 00000146 6E646572206973206E-
+    16 0000014F 656761746976650A00 
+    17 00000158 476F6F646279650A00      goodbye db "Goodbye", 10, 0
+    18                                  
+    19                                  segment .bss
+    20                                  
+    21                                  segment .text
+    22                                  
+    23                                  assignment2:
+    24 00000000 55                      push       rbp                                              ;Save a copy of the stack base pointer
+    25 00000001 4889E5                  mov        rbp, rsp                                         ;We do this in order to be 100% compatible with C and C++.
+    26 00000004 53                      push       rbx                                              ;Back up rbx
+    27 00000005 51                      push       rcx                                              ;Back up rcx
+    28 00000006 52                      push       rdx                                              ;Back up rdx
+    29 00000007 56                      push       rsi                                              ;Back up rsi
+    30 00000008 57                      push       rdi                                              ;Back up rdi
+    31 00000009 4150                    push       r8                                               ;Back up r8
+    32 0000000B 4151                    push       r9                                               ;Back up r9
+    33 0000000D 4152                    push       r10                                              ;Back up r10
+    34 0000000F 4153                    push       r11                                              ;Back up r11
+    35 00000011 4154                    push       r12                                              ;Back up r12
+    36 00000013 4155                    push       r13                                              ;Back up r13
+    37 00000015 4156                    push       r14                                              ;Back up r14
+    38 00000017 4157                    push       r15                                              ;Back up r15
+    39 00000019 9C                      pushf
     40                                  
-    41                                  
-    42 0000001A B800000000              mov rax, 0
-    43 0000001F 48BF-                   mov rdi, welcome_message
-    43 00000021 [0000000000000000] 
-    44 00000029 E8(00000000)            call printf
-    45                                  
-    46 0000002E B800000000              mov rax, 0
-    47 00000033 48BF-                   mov rdi, first_integer_prompt
-    47 00000035 [1B00000000000000] 
-    48 0000003D E8(00000000)            call printf
-    49                                  
-    50 00000042 6A00                    push qword 0
-    51 00000044 6A00                    push qword 0
-    52 00000046 B800000000              mov rax, 0
-    53 0000004B 48BF-                   mov rdi, integer_format
-    53 0000004D [7E00000000000000] 
-    54 00000055 4889E6                  mov rsi, rsp
-    55 00000058 E8(00000000)            call scanf
-    56 0000005D 4C8B2424                mov r12, [rsp]
-    57 00000061 58                      pop rax
-    58 00000062 58                      pop rax
-    59                                  
-    60 00000063 B800000000              mov rax, 0
-    61 00000068 48BF-                   mov rdi, print_register
-    61 0000006A [CF00000000000000] 
-    62 00000072 4C89E6                  mov rsi, r12
-    63 00000075 E8(00000000)            call printf
-    64                                  
-    65 0000007A B800000000              mov rax, 0
-    66 0000007F 48BF-                   mov rdi, second_integer_prompt
-    66 00000081 [4C00000000000000] 
-    67 00000089 E8(00000000)            call printf
-    68                                  
-    69 0000008E 6A00                    push qword 0
-    70 00000090 6A00                    push qword 0
-    71 00000092 B800000000              mov rax, 0
-    72 00000097 48BF-                   mov rdi, integer_format
-    72 00000099 [7E00000000000000] 
-    73 000000A1 4889E6                  mov rsi, rsp
-    74 000000A4 E8(00000000)            call scanf
-    75 000000A9 4C8B2C24                mov r13, [rsp]
-    76 000000AD 58                      pop rax
-    77 000000AE 58                      pop rax
-    78                                  
-    79 000000AF B800000000              mov rax, 0
-    80 000000B4 48BF-                   mov rdi, print_register
-    80 000000B6 [CF00000000000000] 
-    81 000000BE 4C89EE                  mov rsi, r13
-    82 000000C1 E8(00000000)            call printf
-    83                                  
-    84 000000C6 B800000000              mov rax, 0
-    85 000000CB 48BF-                   mov rdi, two_numbers
-    85 000000CD [8200000000000000] 
-    86 000000D5 4C89E6                  mov rsi, r12
-    87 000000D8 4C89EA                  mov rdx, r13
-    88 000000DB E8(00000000)            call printf
-    89                                  
-    90                                  ;mov rax, r14
-    91                                  ;cqo
-    92                                  ;idiv r15
-    93                                  ;mov r13, rax
-    94                                  ;mov r12, rdx
-    95                                  
-    96                                  ;mov rax, 0
-    97                                  ;mov rdi, division_result
-    98                                  ;mov rsi, r13
-    99                                  ;mov rdx, r12
-   100                                  ;call printf
-   101                                  
-   102 000000E0 9D                      popf                                                        ;Restore rflags
-   103 000000E1 415F                    pop        r15                                              ;Restore r15
-   104 000000E3 415E                    pop        r14                                              ;Restore r14
-   105 000000E5 415D                    pop        r13                                              ;Restore r13
-   106 000000E7 415C                    pop        r12                                              ;Restore r12
-   107 000000E9 415B                    pop        r11                                              ;Restore r11
-   108 000000EB 415A                    pop        r10                                              ;Restore r10
-   109 000000ED 4159                    pop        r9                                               ;Restore r9
-   110 000000EF 4158                    pop        r8                                               ;Restore r8
-   111 000000F1 5F                      pop        rdi                                              ;Restore rdi
-   112 000000F2 5E                      pop        rsi                                              ;Restore rsi
-   113 000000F3 5A                      pop        rdx                                              ;Restore rdx
-   114 000000F4 59                      pop        rcx                                              ;Restore rcx
-   115 000000F5 5B                      pop        rbx                                              ;Restore rbx
-   116 000000F6 5D                      pop        rbp                                              ;Restore rbp
-   117                                  
-   118 000000F7 41B900000000            mov r9, 0
-   119 000000FD 4C89C8                  mov rax, r9 ;return 0 to the OS
-   120 00000100 C3                      ret
+    41                                  ;registers r10 and r11 do not function properly
+    42                                  ;registers r8 and r9 also do not function properly                                                     ;Back up rflags
+    43                                  
+    44                                  
+    45 0000001A B800000000              mov rax, 0
+    46 0000001F 48BF-                   mov rdi, welcome_message
+    46 00000021 [0000000000000000] 
+    47 00000029 E8(00000000)            call printf
+    48                                  
+    49 0000002E B800000000              mov rax, 0
+    50 00000033 48BF-                   mov rdi, first_integer_prompt
+    50 00000035 [1B00000000000000] 
+    51 0000003D E8(00000000)            call printf
+    52                                  
+    53 00000042 6A00                    push qword 0
+    54 00000044 6A00                    push qword 0
+    55 00000046 B800000000              mov rax, 0
+    56 0000004B 48BF-                   mov rdi, integer_format
+    56 0000004D [7E00000000000000] 
+    57 00000055 4889E6                  mov rsi, rsp
+    58 00000058 E8(00000000)            call scanf
+    59 0000005D 4C8B3424                mov r14, [rsp]
+    60 00000061 58                      pop rax
+    61 00000062 58                      pop rax
+    62                                  
+    63 00000063 B800000000              mov rax, 0
+    64 00000068 48BF-                   mov rdi, print_register
+    64 0000006A [CF00000000000000] 
+    65 00000072 4C89F6                  mov rsi, r14
+    66 00000075 E8(00000000)            call printf
+    67                                  
+    68 0000007A B800000000              mov rax, 0
+    69 0000007F 48BF-                   mov rdi, second_integer_prompt
+    69 00000081 [4C00000000000000] 
+    70 00000089 E8(00000000)            call printf
+    71                                  
+    72 0000008E 6A00                    push qword 0
+    73 00000090 6A00                    push qword 0
+    74 00000092 B800000000              mov rax, 0
+    75 00000097 48BF-                   mov rdi, integer_format
+    75 00000099 [7E00000000000000] 
+    76 000000A1 4889E6                  mov rsi, rsp
+    77 000000A4 E8(00000000)            call scanf
+    78 000000A9 4C8B3C24                mov r15, [rsp]
+    79 000000AD 58                      pop rax
+    80 000000AE 58                      pop rax
+    81                                  
+    82 000000AF B800000000              mov rax, 0
+    83 000000B4 48BF-                   mov rdi, print_register
+    83 000000B6 [CF00000000000000] 
+    84 000000BE 4C89FE                  mov rsi, r15
+    85 000000C1 E8(00000000)            call printf
+    86                                  
+    87 000000C6 B800000000              mov rax, 0
+    88 000000CB 48BF-                   mov rdi, two_numbers
+    88 000000CD [8200000000000000] 
+    89 000000D5 4C89F6                  mov rsi, r14
+    90 000000D8 4C89FA                  mov rdx, r15
+    91 000000DB E8(00000000)            call printf
+    92                                  
+    93 000000E0 4C89F0                  mov rax, r14
+    94 000000E3 4899                    cqo
+    95 000000E5 49F7FF                  idiv r15
+    96 000000E8 4989C5                  mov r13, rax
+    97 000000EB 4989D4                  mov r12, rdx
+    98                                  
+    99 000000EE B800000000              mov rax, 0
+   100 000000F3 48BF-                   mov rdi, division_result
+   100 000000F5 [F600000000000000] 
+   101 000000FD 4C89EE                  mov rsi, r13
+   102 00000100 4C89E2                  mov rdx, r12
+   103 00000103 E8(00000000)            call printf
+   104                                  
+   105 00000108 4983FC64                cmp r12, 100
+   106 0000010C 7F14                    jg positive
+   107 0000010E B800000000              mov rax, 0
+   108 00000113 48BF-                   mov rdi, negative_msg
+   108 00000115 [3D01000000000000] 
+   109 0000011D E8(00000000)            call printf
+   110                                  
+   111                                  positive:
+   112 00000122 B800000000              mov rax, 0
+   113 00000127 48BF-                   mov rdi, positive_msg
+   113 00000129 [2201000000000000] 
+   114 00000131 E8(00000000)            call printf
+   115                                  
+   116                                  
+   117 00000136 9D                      popf                                                        ;Restore rflags
+   118 00000137 415F                    pop        r15                                              ;Restore r15
+   119 00000139 415E                    pop        r14                                              ;Restore r14
+   120 0000013B 415D                    pop        r13                                              ;Restore r13
+   121 0000013D 415C                    pop        r12                                              ;Restore r12
+   122 0000013F 415B                    pop        r11                                              ;Restore r11
+   123 00000141 415A                    pop        r10                                              ;Restore r10
+   124 00000143 4159                    pop        r9                                               ;Restore r9
+   125 00000145 4158                    pop        r8                                               ;Restore r8
+   126 00000147 5F                      pop        rdi                                              ;Restore rdi
+   127 00000148 5E                      pop        rsi                                              ;Restore rsi
+   128 00000149 5A                      pop        rdx                                              ;Restore rdx
+   129 0000014A 59                      pop        rcx                                              ;Restore rcx
+   130 0000014B 5B                      pop        rbx                                              ;Restore rbx
+   131 0000014C 5D                      pop        rbp                                              ;Restore rbp
+   132                                  
+   133 0000014D 41B900000000            mov r9, 0
+   134 00000153 4C89C8                  mov rax, r9 ;return 0 to the OS
+   135 00000156 C3                      ret
