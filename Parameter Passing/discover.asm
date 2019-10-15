@@ -108,7 +108,7 @@ mov qword [r15+8*6], -5
 
 ;===== Display the contents of the array ==========================================================================================
 
-
+'''
 mov rax, 0
 mov rdi, numbers_in_the_array
 mov rsi, [r15+8*0]
@@ -123,7 +123,19 @@ push rax
 call printf
 pop rax
 pop rax
+'''
 
+mov rax, 0
+mov rdi, numbers_in_the_array
+mov rsi, [r15+8*0]
+mov rdx, [r15+8*1]
+mov rcx, [r15+8*2]
+mov r8,  [r15+8*3]
+mov r9,  [r15+8*4]
+mov r10, [r15+8*5]
+mov r11, [r15+8*6]
+call printf
+pop rax
 
 ;===== Call the swap function that lives in another file ==========================================================================
 
