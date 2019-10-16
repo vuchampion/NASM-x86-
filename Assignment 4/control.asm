@@ -18,7 +18,7 @@ ready_false db "You are not ready...", 10, 0
 ready_true db "You are ready!", 10, 0
 welcome_msg db "The control.asm module has begun executing", 10, 0
 goodbye_msg db "You are leaving the control.asm module", 10, 0
-print_register db "Register contains: %ld ", 10, 0
+print_register db "From Control: Register r10 contains: %ld ", 10, 0
 
 segment .bss
 array_one resq 5
@@ -106,10 +106,9 @@ jmp refill
 
 correct:
 mov rax, 0
-;mov rdi, array_one
 call sum
 
-mov rax, 0
+;mov rax, 0
 mov rdi, print_register
 mov rsi, r10
 call printf
