@@ -13,72 +13,77 @@
     11 00000012 206861732062656775-
     11 0000001B 6E2065786563757469-
     11 00000024 6E670A00           
-    12 00000028 46726F6D2053756D3A-     print_i db "From Sum: register r10 contains: %ld", 10, 0
-    12 00000031 207265676973746572-
-    12 0000003A 2072313020636F6E74-
-    12 00000043 61696E733A20256C64-
-    12 0000004C 0A00               
+    12                                  ;print_i db "From Sum: register r14 contains: %ld", 10, 0
     13                                  
     14                                  sum:
     15                                  
-    16 0000004E 55                      push rbp                                                    ;Backup the base pointer
-    17 0000004F 4889E5                  mov  rbp,rsp                                                ;Advance the base pointer to start of the current stack frame
-    18 00000052 57                      push rdi                                                    ;Backup rdi
-    19 00000053 56                      push rsi                                                    ;Backup rsi
-    20 00000054 52                      push rdx                                                    ;Backup rdx
-    21 00000055 51                      push rcx                                                    ;Backup rcx
-    22 00000056 4150                    push r8                                                     ;Backup r8
-    23 00000058 4151                    push r9                                                     ;Backup r9
-    24                                  ;push r10                                                    ;Backup r10
-    25 0000005A 4153                    push r11                                                    ;Backup r11: printf often changes r11
-    26 0000005C 4154                    push r12                                                    ;Backup r12
-    27 0000005E 4155                    push r13                                                    ;Backup r13
-    28 00000060 4156                    push r14                                                    ;Backup r14
-    29 00000062 4157                    push r15                                                    ;Backup r15
-    30 00000064 53                      push rbx                                                    ;Backup rbx
-    31 00000065 9C                      pushf                                                       ;Backup rflags
+    16 00000028 55                      push rbp                                                    ;Backup the base pointer
+    17 00000029 4889E5                  mov  rbp,rsp                                                ;Advance the base pointer to start of the current stack frame
+    18 0000002C 57                      push rdi                                                    ;Backup rdi
+    19 0000002D 56                      push rsi                                                    ;Backup rsi
+    20 0000002E 52                      push rdx                                                    ;Backup rdx
+    21 0000002F 51                      push rcx                                                    ;Backup rcx
+    22 00000030 4150                    push r8                                                     ;Backup r8
+    23 00000032 4151                    push r9                                                     ;Backup r9
+    24 00000034 4152                    push r10                                                    ;Backup r10
+    25 00000036 4153                    push r11                                                    ;Backup r11: printf often changes r11
+    26 00000038 4154                    push r12                                                    ;Backup r12
+    27 0000003A 4155                    push r13                                                    ;Backup r13
+    28                                  ;push r14                                                    ;Backup r14
+    29 0000003C 4157                    push r15                                                    ;Backup r15
+    30 0000003E 53                      push rbx                                                    ;Backup rbx
+    31 0000003F 9C                      pushf                                                       ;Backup rflags
     32                                  ;--------------------------------------------------------------------------------------------------
     33                                  
-    34 00000066 B800000000              mov rax, 0
-    35 0000006B 48BF-                   mov rdi, welcome_message
-    35 0000006D [0000000000000000] 
-    36 00000075 E8(00000000)            call printf
+    34 00000040 B800000000              mov rax, 0
+    35 00000045 48BF-                   mov rdi, welcome_message
+    35 00000047 [0000000000000000] 
+    36 0000004F E8(00000000)            call printf
     37                                  
-    38 0000007A 41BA00000000            mov r10, 0 ;sum of all the indexes
-    39 00000080 4D8B07                  mov r8, [r15+8*0]
-    40 00000083 4D8B4F08                mov r9, [r15+8*1]
-    41 00000087 4D8B5F10                mov r11, [r15+8*2]
-    42 0000008B 4D8B6718                mov r12, [r15+8*3]
-    43 0000008F 4D8B6F20                mov r13, [r15+8*4]
-    44                                  
-    45 00000093 4D01C2                  add r10, r8
-    46 00000096 4D01CA                  add r10, r9
-    47 00000099 4D01DA                  add r10, r11
-    48 0000009C 4D01E2                  add r10, r12
-    49 0000009F 4D01EA                  add r10, r13
-    50                                  
-    51 000000A2 B800000000              mov rax, 0
-    52 000000A7 48BF-                   mov rdi, print_i
-    52 000000A9 [2800000000000000] 
-    53 000000B1 4C89D6                  mov rsi, r10
-    54 000000B4 E8(00000000)            call printf
-    55                                  
-    56                                  ;--------------------------------------------------------------------------------------------------
-    57 000000B9 9D                      popf                                                        ;Restore rflags
-    58 000000BA 5B                      pop rbx                                                     ;Restore rbx
-    59 000000BB 415F                    pop r15                                                     ;Restore r15
-    60 000000BD 415E                    pop r14                                                     ;Restore r14
-    61 000000BF 415D                    pop r13                                                     ;Restore r13
-    62 000000C1 415C                    pop r12                                                     ;Restore r12
-    63 000000C3 415B                    pop r11                                                     ;Restore r11
-    64                                  ;pop r10                                                     ;Restore r10
-    65 000000C5 4159                    pop r9                                                      ;Restore r9
-    66 000000C7 4158                    pop r8                                                      ;Restore r8
-    67 000000C9 59                      pop rcx                                                     ;Restore rcx
-    68 000000CA 5A                      pop rdx                                                     ;Restore rdx
-    69 000000CB 5E                      pop rsi                                                     ;Restore rsi
-    70 000000CC 5F                      pop rdi                                                     ;Restore rdi
-    71 000000CD 5D                      pop rbp                                                     ;Restore rbp
-    72                                  
-    73 000000CE 4C89D0                  mov rax, r10
-    74 000000D1 C3                      ret
+    38                                  ;using register r10 was no good because printf kept on changing its value
+    39 00000054 41BE00000000            mov r14, 0 ;sum of all the indexes
+    40 0000005A 4D8B07                  mov r8, [r15+8*0]
+    41 0000005D 4D8B4F08                mov r9, [r15+8*1]
+    42 00000061 4D8B5F10                mov r11, [r15+8*2]
+    43 00000065 4D8B6718                mov r12, [r15+8*3]
+    44 00000069 4D8B6F20                mov r13, [r15+8*4]
+    45                                  
+    46 0000006D 4D01C6                  add r14, r8
+    47 00000070 4D01CE                  add r14, r9
+    48 00000073 4D01DE                  add r14, r11
+    49 00000076 4D01E6                  add r14, r12
+    50 00000079 4D01EE                  add r14, r13
+    51                                  
+    52                                  
+    53                                  ;mov rax, 0         ;kept for future reference
+    54                                  ;mov rdi, print_i
+    55                                  ;mov rsi, r14
+    56                                  ;call printf
+    57                                  ;mov rax, 0
+    58                                  ;mov rdi, print_i
+    59                                  ;mov rsi, r14
+    60                                  ;call printf
+    61                                  ;mov rax, 0
+    62                                  ;mov rdi, print_i
+    63                                  ;mov rsi, r14
+    64                                  ;call printf
+    65                                  
+    66                                  ;--------------------------------------------------------------------------------------------------
+    67 0000007C 9D                      popf                                                        ;Restore rflags
+    68 0000007D 5B                      pop rbx                                                     ;Restore rbx
+    69 0000007E 415F                    pop r15                                                     ;Restore r15
+    70                                  ;pop r14                                                     ;Restore r14
+    71 00000080 415D                    pop r13                                                     ;Restore r13
+    72 00000082 415C                    pop r12                                                     ;Restore r12
+    73 00000084 415B                    pop r11                                                     ;Restore r11
+    74 00000086 415A                    pop r10                                                     ;Restore r10
+    75 00000088 4159                    pop r9                                                      ;Restore r9
+    76 0000008A 4158                    pop r8                                                      ;Restore r8
+    77 0000008C 59                      pop rcx                                                     ;Restore rcx
+    78 0000008D 5A                      pop rdx                                                     ;Restore rdx
+    79 0000008E 5E                      pop rsi                                                     ;Restore rsi
+    80 0000008F 5F                      pop rdi                                                     ;Restore rdi
+    81 00000090 5D                      pop rbp                                                     ;Restore rbp
+    82                                  
+    83                                  ;mov rax, r10
+    84 00000091 C3                      ret

@@ -4,8 +4,6 @@
 rm *.out
 rm *.o
 
-echo "\n"
-
 echo "Compile main.c"
 gcc -c -g -Wall -m64 -std=c99 -fno-pie -no-pie -o main.o main.c
 
@@ -21,12 +19,10 @@ gcc -c -g -Wall -m64 -std=c11 -fno-pie -no-pie -o display.o display.c
 echo "Compile sum.asm"
 nasm -g -f elf64 -l control.lis -o sum.o sum.asm
 
-echo "Linking"
+echo "Linking all object files..."
 g++ -g -m64 -std=c++14 -fno-pie -no-pie -o executable.out main.o control.o fill.o display.o sum.o
 
-echo "\n"
-
-echo "Run Program"
+echo "Executing ./out\n"
 ./executable.out
 
-echo "Exit Bash"
+echo "Exiting Bash..."

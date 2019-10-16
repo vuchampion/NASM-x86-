@@ -18,7 +18,7 @@ ready_false db "You are not ready...", 10, 0
 ready_true db "You are ready!", 10, 0
 welcome_msg db "The control.asm module has begun executing", 10, 0
 goodbye_msg db "You are leaving the control.asm module", 10, 0
-print_register db "From Control: Register r10 contains: %ld ", 10, 0
+print_register db "The sum of the array is: %ld ", 10, 0
 
 segment .bss
 array_one resq 5
@@ -108,9 +108,9 @@ correct:
 mov rax, 0
 call sum
 
-;mov rax, 0
+mov rax, 0
 mov rdi, print_register
-mov rsi, r10
+mov rsi, r14  ;contains the sum of our array
 call printf
 
 exit_program:
@@ -118,6 +118,7 @@ mov rax, 0
 mov rdi, goodbye_msg
 call printf
 
+mov rax, r14  ;return code
 ;--------------------------------------------------------------------------------------------------
 popf                                                        ;Restore rflags
 pop rbx                                                     ;Restore rbx
@@ -135,5 +136,4 @@ pop rsi                                                     ;Restore rsi
 pop rdi                                                     ;Restore rdi
 pop rbp                                                     ;Restore rbp
 
-mov rax, 0
 ret
