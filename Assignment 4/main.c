@@ -1,3 +1,7 @@
+//  Author name: Darren Vu
+//  Author email: vuchampion@csu.fullerton.edu
+//  Date of last update: October 19, 2019
+
 #include "stdio.h"
 
 extern long control();

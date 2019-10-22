@@ -1,8 +1,14 @@
+;  Author name: Darren Vu
+;  Author email: vuchampion@csu.fullerton.edu
+;  Date of last update: October 19, 2019
+
 extern printf
 extern scanf
 extern fill
 extern display
 extern sum
+extern clearerr
+extern stdin
 
 global control
 
@@ -19,9 +25,10 @@ ready_true db "You are ready!", 10, 0
 welcome_msg db "The control.asm module has begun executing", 10, 0
 goodbye_msg db "You are leaving the control.asm module", 10, 0
 print_register db "The sum of the array is: %ld ", 10, 0
+clear_ss db "Clear stream state", 10, 0
 
 segment .bss
-array_one resq 5
+array_one resq 10
 
 segment .text
 
@@ -44,7 +51,6 @@ push r15                                                    ;Backup r15
 push rbx                                                    ;Backup rbx
 pushf                                                       ;Backup rflags
 ;--------------------------------------------------------------------------------------------------
-
 mov r15, array_one
 
 mov rax, 0
@@ -78,12 +84,21 @@ mov rdi, ready_true
 call printf
 
 refill:
+mov r13, 0
 mov rax, 0
 mov rdi, array_one
+mov rsi, 10
 call fill
+
+mov r13, rax    ;r13 holds the size of the array
+
+mov rax, 0
+mov rdi, [stdin]
+call clearerr
 
 mov rax, 0
 mov rdi, array_one
+mov rsi, r13
 call display
 
 mov rax, 0

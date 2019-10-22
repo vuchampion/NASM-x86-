@@ -1,3 +1,7 @@
+;  Author name: Darren Vu
+;  Author email: vuchampion@csu.fullerton.edu
+;  Date of last update: October 19, 2019
+
 extern printf
 
 global sum
@@ -5,11 +9,9 @@ global sum
 segment .data
 
 segment .bss
-sum_value resq 1
 
 segment .text
 welcome_message db "The sum.asm module has begun executing", 10, 0
-;print_i db "From Sum: register r14 contains: %ld", 10, 0
 
 sum:
 
@@ -39,15 +41,27 @@ call printf
 mov r14, 0 ;sum of all the indexes
 mov r8, [r15+8*0]
 mov r9, [r15+8*1]
-mov r11, [r15+8*2]
-mov r12, [r15+8*3]
-mov r13, [r15+8*4]
+mov r10, [r15+8*2]
+mov r11, [r15+8*3]
+mov r12, [r15+8*4]
+mov r13, [r15+8*5]
 
 add r14, r8
 add r14, r9
+add r14, r10
 add r14, r11
 add r14, r12
 add r14, r13
+
+mov r8, [r15+8*6]
+mov r9, [r15+8*7]
+mov r10, [r15+8*8]
+mov r11, [r15+8*9]
+
+add r14, r8
+add r14, r9
+add r14, r10
+add r14, r11
 
 
 ;mov rax, 0         ;kept for future reference
