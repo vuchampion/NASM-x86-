@@ -1,6 +1,8 @@
 ;  Author name: Darren Vu
 ;  Author email: vuchampion@csu.fullerton.edu
 ;  Date of last update: October 19, 2019
+;  Useful resource: http://www.egr.unlv.edu/~ed/assembly64.pdf
+;  Page: 177
 
 extern printf
 extern scanf
