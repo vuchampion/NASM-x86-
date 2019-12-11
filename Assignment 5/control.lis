@@ -1,0 +1,221 @@
+     1                                  ;  Author name: Darren Vu
+     2                                  ;  Author email: vuchampion@csu.fullerton.edu
+     3                                  ;  Date of last update: December 11, 2019
+     4                                  
+     5                                  extern printf
+     6                                  extern scanf
+     7                                  
+     8                                  global control
+     9                                  
+    10                                  segment .data
+    11 00000000 57656C636F6D652074-     welcome_msg db "Welcome to CPSC 240 brought to you by Darren Vu", 10, 0
+    11 00000009 6F2043505343203234-
+    11 00000012 302062726F75676874-
+    11 0000001B 20746F20796F752062-
+    11 00000024 792044617272656E20-
+    11 0000002D 56750A00           
+    12 00000031 54686973206D6F6475-     return_msg db "This module will now return the hypotenuse to the caller.", 10, 0
+    12 0000003A 6C652077696C6C206E-
+    12 00000043 6F772072657475726E-
+    12 0000004C 20746865206879706F-
+    12 00000055 74656E75736520746F-
+    12 0000005E 207468652063616C6C-
+    12 00000067 65722E0A00         
+    13 0000006C 57656C636F6D652074-     rt_tri_msg db "Welcome to Right Triangle Analyzer", 10, 0
+    13 00000075 6F2052696768742054-
+    13 0000007E 7269616E676C652041-
+    13 00000087 6E616C797A65720A00 
+    14 00000090 456E74657220746865-     prompt_msg db "Enter the lengths of the two legs of a right triangle seperated by whitespace and press enter.", 10, 0
+    14 00000099 206C656E6774687320-
+    14 000000A2 6F6620746865207477-
+    14 000000AB 6F206C656773206F66-
+    14 000000B4 206120726967687420-
+    14 000000BD 747269616E676C6520-
+    14 000000C6 736570657261746564-
+    14 000000CF 206279207768697465-
+    14 000000D8 737061636520616E64-
+    14 000000E1 20707265737320656E-
+    14 000000EA 7465722E0A00       
+    15 000000F0 5468616E6B20796F75-     confirm db "Thank you for the nice numbers.", 10, 0
+    15 000000F9 20666F722074686520-
+    15 00000102 6E696365206E756D62-
+    15 0000010B 6572732E0A00       
+    16 00000111 256C6600                input_format db "%lf", 0
+    17 00000115 546865206172656120-     print_area db "The area of the triangle is (base * height)/2 which is: %lf units squared.", 10, 0
+    17 0000011E 6F6620746865207472-
+    17 00000127 69616E676C65206973-
+    17 00000130 202862617365202A20-
+    17 00000139 686569676874292F32-
+    17 00000142 207768696368206973-
+    17 0000014B 3A20256C6620756E69-
+    17 00000154 747320737175617265-
+    17 0000015D 642E0A00           
+    18 00000161 546865206879706F74-     print_hypotenuse db "The hypotenuse has length: %lf units.", 10, 0
+    18 0000016A 656E75736520686173-
+    18 00000173 206C656E6774683A20-
+    18 0000017C 256C6620756E697473-
+    18 00000185 2E0A00             
+    19 00000188 596F7572206E756D62-     print_number db "Your number is: %lf", 10, 0
+    19 00000191 65722069733A20256C-
+    19 0000019A 660A00             
+    20 0000019D 596F7572206E756D62-     print_two_numbers db "Your numbers are: %lf and %lf", 10, 0
+    20 000001A6 657273206172653A20-
+    20 000001AF 256C6620616E642025-
+    20 000001B8 6C660A00           
+    21                                  
+    22                                  segment .bss
+    23                                  
+    24                                  segment .text
+    25                                  
+    26                                  control:
+    27                                  
+    28 00000000 55                      push rbp                                                    ;Backup the base pointer
+    29 00000001 4889E5                  mov  rbp,rsp                                                ;Advance the base pointer to start of the current stack frame
+    30 00000004 57                      push rdi                                                    ;Backup rdi
+    31 00000005 56                      push rsi                                                    ;Backup rsi
+    32 00000006 52                      push rdx                                                    ;Backup rdx
+    33 00000007 51                      push rcx                                                    ;Backup rcx
+    34 00000008 4150                    push r8                                                     ;Backup r8
+    35 0000000A 4151                    push r9                                                     ;Backup r9
+    36 0000000C 4152                    push r10                                                    ;Backup r10
+    37 0000000E 4153                    push r11                                                    ;Backup r11: printf often changes r11
+    38 00000010 4154                    push r12                                                    ;Backup r12
+    39 00000012 4155                    push r13                                                    ;Backup r13
+    40 00000014 4156                    push r14                                                    ;Backup r14
+    41 00000016 4157                    push r15                                                    ;Backup r15
+    42 00000018 53                      push rbx                                                    ;Backup rbx
+    43 00000019 9C                      pushf                                                       ;Backup rflags
+    44                                  ;--------------------------------------------------------------------------------------------------
+    45 0000001A B800000000              mov rax, 0
+    46 0000001F 48BF-                   mov rdi, welcome_msg
+    46 00000021 [0000000000000000] 
+    47 00000029 E8(00000000)            call printf
+    48                                  
+    49 0000002E B800000000              mov rax, 0
+    50 00000033 48BF-                   mov rdi, rt_tri_msg
+    50 00000035 [6C00000000000000] 
+    51 0000003D E8(00000000)            call printf
+    52                                  
+    53 00000042 B800000000              mov rax, 0
+    54 00000047 48BF-                   mov rdi, prompt_msg
+    54 00000049 [9000000000000000] 
+    55 00000051 E8(00000000)            call printf
+    56                                  
+    57 00000056 6A00                    push qword 0
+    58 00000058 6A00                    push qword 0
+    59 0000005A B801000000              mov rax, 1
+    60 0000005F 48BF-                   mov rdi, input_format
+    60 00000061 [1101000000000000] 
+    61 00000069 4889E6                  mov rsi, rsp
+    62 0000006C E8(00000000)            call scanf
+    63 00000071 F2440F102C24            movsd xmm13, [rsp]
+    64 00000077 58                      pop rax
+    65 00000078 58                      pop rax
+    66                                  
+    67 00000079 6A00                    push qword 0
+    68 0000007B 6A00                    push qword 0
+    69 0000007D B801000000              mov rax, 1
+    70 00000082 48BF-                   mov rdi, input_format
+    70 00000084 [1101000000000000] 
+    71 0000008C 4889E6                  mov rsi, rsp
+    72 0000008F E8(00000000)            call scanf
+    73 00000094 F2440F103424            movsd xmm14, [rsp]
+    74 0000009A 58                      pop rax
+    75 0000009B 58                      pop rax
+    76                                  
+    77                                  ;Save the values for later manipulation
+    78 0000009C F2450F10D5              movsd xmm10, xmm13
+    79 000000A1 F2450F10DE              movsd xmm11, xmm14
+    80                                  
+    81                                  ;Print out two numbers, use xmm0 & xmm1 as argument 1 and 2.
+    82                                  ;When using floating point xmm registers the arguments differ slightly.
+    83 000000A6 B801000000              mov rax, 1
+    84 000000AB 48BF-                   mov rdi, print_two_numbers
+    84 000000AD [9D01000000000000] 
+    85 000000B5 F2410F10C5              movsd xmm0, xmm13
+    86 000000BA F2410F10CE              movsd xmm1, xmm14
+    87 000000BF E8(00000000)            call printf
+    88                                  
+    89                                  ;0x4000000000000000 is 2.0 in decimal
+    90                                  ;We do these next set of instructions to place a 2 in xmm15
+    91                                  ;The two is used to divide base * height
+    92                                  ;This is necessary because it is illegal to movsd xmm15, 2.0
+    93 000000C4 49BF00000000000000-     mov        r15, 0x4000000000000000
+    93 000000CD 40                 
+    94 000000CE 4157                    push       r15                                              ;Place the constant on the integer stack
+    95 000000D0 F2440F103C24            movsd      xmm15, [rsp]                                     ;Copy the divisor to xmm13
+    96 000000D6 58                      pop        rax                                              ;Discard the divisor from the integer stack
+    97                                  
+    98                                  ;Multiply register xmm13 by xmm14
+    99                                  ;The product is stored in xmm13
+   100 000000D7 F2450F59EE              mulsd xmm13, xmm14
+   101                                  
+   102                                  ;Check to see if the product of the first two numbers is correct
+   103                                  ;mov rax, 1
+   104                                  ;mov rdi, print_number
+   105                                  ;movsd xmm0, xmm13
+   106                                  ;call printf
+   107                                  
+   108                                  ;Check to make sure xmm15 still holds 2.0
+   109                                  ;mov rax, 1
+   110                                  ;mov rdi, print_number
+   111                                  ;movsd xmm0, xmm15
+   112                                  ;call printf
+   113                                  
+   114                                  ;divsd instruction set: xmm13 = xmm13 / xmm15
+   115                                  ;divsd does not hold any remainders
+   116 000000DC F2450F5EEF              divsd xmm13, xmm15
+   117                                  
+   118 000000E1 B801000000              mov rax, 1
+   119 000000E6 48BF-                   mov rdi, print_area
+   119 000000E8 [1501000000000000] 
+   120 000000F0 F2410F10C5              movsd xmm0, xmm13
+   121 000000F5 E8(00000000)            call printf
+   122                                  
+   123                                  
+   124                                  ;Recall that the hypotenuse is the square root of A squared + B squared.
+   125                                  ;Recall that we saved A and B in xmm10 & xmm11 respectively.
+   126                                  ;Find the squares of A and B:
+   127 000000FA F2450F59D2              mulsd xmm10, xmm10
+   128 000000FF F2450F59DB              mulsd xmm11, xmm11
+   129                                  
+   130                                  ;Add A and B
+   131 00000104 F2450F58D3              addsd xmm10, xmm11
+   132                                  
+   133                                  ;Find the square root
+   134 00000109 F2450F51D2              sqrtsd xmm10, xmm10
+   135                                  
+   136 0000010E B801000000              mov rax, 1
+   137 00000113 48BF-                   mov rdi, print_hypotenuse
+   137 00000115 [6101000000000000] 
+   138 0000011D F2410F10C2              movsd xmm0, xmm10
+   139 00000122 E8(00000000)            call printf
+   140                                  
+   141 00000127 B800000000              mov rax, 0
+   142 0000012C 48BF-                   mov rdi, return_msg
+   142 0000012E [3100000000000000] 
+   143 00000136 E8(00000000)            call printf
+   144                                  
+   145                                  ;mov rax, 0  ;return code
+   146                                  ;push r14
+   147                                  ;movsd xmm14, [rsp]
+   148                                  ;pop r14
+   149                                  
+   150                                  ;--------------------------------------------------------------------------------------------------
+   151 0000013B 9D                      popf                                                        ;Restore rflags
+   152 0000013C 5B                      pop rbx                                                     ;Restore rbx
+   153 0000013D 415F                    pop r15                                                     ;Restore r15
+   154 0000013F 415E                    pop r14                                                     ;Restore r14
+   155 00000141 415D                    pop r13                                                     ;Restore r13
+   156 00000143 415C                    pop r12                                                     ;Restore r12
+   157 00000145 415B                    pop r11                                                     ;Restore r11
+   158 00000147 415A                    pop r10                                                     ;Restore r10
+   159 00000149 4159                    pop r9                                                      ;Restore r9
+   160 0000014B 4158                    pop r8                                                      ;Restore r8
+   161 0000014D 59                      pop rcx                                                     ;Restore rcx
+   162 0000014E 5A                      pop rdx                                                     ;Restore rdx
+   163 0000014F 5E                      pop rsi                                                     ;Restore rsi
+   164 00000150 5F                      pop rdi                                                     ;Restore rdi
+   165 00000151 5D                      pop rbp                                                     ;Restore rbp
+   166                                  
+   167 00000152 C3                      ret
