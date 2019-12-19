@@ -1,6 +1,6 @@
 ;  Author name: Darren Vu
 ;  Author email: vuchampion@csu.fullerton.edu
-;  Date of last update: December 11, 2019
+;  Date of last update: December 18, 2019
 
 extern printf
 extern scanf
@@ -138,15 +138,10 @@ mov rdi, print_hypotenuse
 movsd xmm0, xmm10
 call printf
 
-mov rax, 0
-mov rdi, return_msg
-call printf
 
-;mov rax, 0  ;return code
-;push r14
-;movsd xmm14, [rsp]
-;pop r14
-
+;In order to return we dont "mov rax, <return value>" like usual.
+;Instead, we have to move the return value into xmm0.
+movsd xmm0, xmm10
 ;--------------------------------------------------------------------------------------------------
 popf                                                        ;Restore rflags
 pop rbx                                                     ;Restore rbx

@@ -1,6 +1,6 @@
      1                                  ;  Author name: Darren Vu
      2                                  ;  Author email: vuchampion@csu.fullerton.edu
-     3                                  ;  Date of last update: December 11, 2019
+     3                                  ;  Date of last update: December 18, 2019
      4                                  
      5                                  extern printf
      6                                  extern scanf
@@ -191,31 +191,34 @@
    138 0000011D F2410F10C2              movsd xmm0, xmm10
    139 00000122 E8(00000000)            call printf
    140                                  
-   141 00000127 B800000000              mov rax, 0
-   142 0000012C 48BF-                   mov rdi, return_msg
-   142 0000012E [3100000000000000] 
-   143 00000136 E8(00000000)            call printf
-   144                                  
-   145                                  ;mov rax, 0  ;return code
-   146                                  ;push r14
-   147                                  ;movsd xmm14, [rsp]
-   148                                  ;pop r14
-   149                                  
-   150                                  ;--------------------------------------------------------------------------------------------------
-   151 0000013B 9D                      popf                                                        ;Restore rflags
-   152 0000013C 5B                      pop rbx                                                     ;Restore rbx
-   153 0000013D 415F                    pop r15                                                     ;Restore r15
-   154 0000013F 415E                    pop r14                                                     ;Restore r14
-   155 00000141 415D                    pop r13                                                     ;Restore r13
-   156 00000143 415C                    pop r12                                                     ;Restore r12
-   157 00000145 415B                    pop r11                                                     ;Restore r11
-   158 00000147 415A                    pop r10                                                     ;Restore r10
-   159 00000149 4159                    pop r9                                                      ;Restore r9
-   160 0000014B 4158                    pop r8                                                      ;Restore r8
-   161 0000014D 59                      pop rcx                                                     ;Restore rcx
-   162 0000014E 5A                      pop rdx                                                     ;Restore rdx
-   163 0000014F 5E                      pop rsi                                                     ;Restore rsi
-   164 00000150 5F                      pop rdi                                                     ;Restore rdi
-   165 00000151 5D                      pop rbp                                                     ;Restore rbp
-   166                                  
-   167 00000152 C3                      ret
+   141 00000127 F2410F10C2              movsd xmm0, xmm10
+   142                                  
+   143                                  ;mov rax, 0
+   144                                  ;mov rdi, return_msg
+   145                                  ;call printf
+   146                                  
+   147                                  ;mov        r15, 0x4000000000000000
+   148                                  ;push       r15                                              ;Place the constant on the integer stack
+   149                                  ;movsd      xmm15, [rsp]                                     ;Copy the divisor to xmm13
+   150                                  ;pop        rax                                              ;Discard the divisor from the integer stack
+   151                                  
+   152                                  ;movsd xmm0, xmm10
+   153                                  ;mov rax, 99  ;return code
+   154                                  ;--------------------------------------------------------------------------------------------------
+   155 0000012C 9D                      popf                                                        ;Restore rflags
+   156 0000012D 5B                      pop rbx                                                     ;Restore rbx
+   157 0000012E 415F                    pop r15                                                     ;Restore r15
+   158 00000130 415E                    pop r14                                                     ;Restore r14
+   159 00000132 415D                    pop r13                                                     ;Restore r13
+   160 00000134 415C                    pop r12                                                     ;Restore r12
+   161 00000136 415B                    pop r11                                                     ;Restore r11
+   162 00000138 415A                    pop r10                                                     ;Restore r10
+   163 0000013A 4159                    pop r9                                                      ;Restore r9
+   164 0000013C 4158                    pop r8                                                      ;Restore r8
+   165 0000013E 59                      pop rcx                                                     ;Restore rcx
+   166 0000013F 5A                      pop rdx                                                     ;Restore rdx
+   167 00000140 5E                      pop rsi                                                     ;Restore rsi
+   168 00000141 5F                      pop rdi                                                     ;Restore rdi
+   169 00000142 5D                      pop rbp                                                     ;Restore rbp
+   170                                  
+   171 00000143 C3                      ret
