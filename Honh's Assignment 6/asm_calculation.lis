@@ -1,0 +1,240 @@
+     1                                  extern printf
+     2                                  extern scanf 
+     3                                  
+     4                                  global hamonic_sum
+     5                                  segment .data
+     6 00000000 54686973206D616368-     	welcome_message db "This machine is running Intel(R) Core(TM) i5-4278U CPU @ 2.6GHz. ",10,0
+     6 00000009 696E65206973207275-
+     6 00000012 6E6E696E6720496E74-
+     6 0000001B 656C28522920436F72-
+     6 00000024 6528544D292069352D-
+     6 0000002D 343237385520435055-
+     6 00000036 204020322E3647487A-
+     6 0000003F 2E200A00           
+     7 00000043 506C6561736520656E-     	prompt_message db "Please enter the number of terms to be included in the harmonic sum:",0
+     7 0000004C 74657220746865206E-
+     7 00000055 756D626572206F6620-
+     7 0000005E 7465726D7320746F20-
+     7 00000067 626520696E636C7564-
+     7 00000070 656420696E20746865-
+     7 00000079 206861726D6F6E6963-
+     7 00000082 2073756D3A00       
+     8 00000088 54686520636C6F636B-     	clock_message_1st db "The clock is now %ld tics and the computation will begin immediately.",10,0
+     8 00000091 206973206E6F772025-
+     8 0000009A 6C6420746963732061-
+     8 000000A3 6E642074686520636F-
+     8 000000AC 6D7075746174696F6E-
+     8 000000B5 2077696C6C20626567-
+     8 000000BE 696E20696D6D656469-
+     8 000000C7 6174656C792E0A00   
+     9 000000CF 54686520636C6F636B-     	clock_message_2nd db "The clock is now %ld tics and the computation is complete.",10,0
+     9 000000D8 206973206E6F772025-
+     9 000000E1 6C6420746963732061-
+     9 000000EA 6E642074686520636F-
+     9 000000F3 6D7075746174696F6E-
+     9 000000FC 20697320636F6D706C-
+     9 00000105 6574652E0A00       
+    10 0000010B 54686520656C617073-     	time_elapsed_message db "The elapsed time was %20.10lf tics. At 2.6GHz that is %10.10lf seconds.",10,0
+    10 00000114 65642074696D652077-
+    10 0000011D 6173202532302E3130-
+    10 00000126 6C6620746963732E20-
+    10 0000012F 417420322E3647487A-
+    10 00000138 207468617420697320-
+    10 00000141 2531302E31306C6620-
+    10 0000014A 7365636F6E64732E0A-
+    10 00000153 00                 
+    11 00000154 46696E616C2073756D-     	sum_message db "Final sum is %10.10lf",10,0
+    11 0000015D 206973202531302E31-
+    11 00000166 306C660A00         
+    12                                  	
+    13 0000016B 546869732061737365-     	farwell_message db "This assembly program will now return the harmonic sum to the driver program."
+    13 00000174 6D626C792070726F67-
+    13 0000017D 72616D2077696C6C20-
+    13 00000186 6E6F77207265747572-
+    13 0000018F 6E2074686520686172-
+    13 00000198 6D6F6E69632073756D-
+    13 000001A1 20746F207468652064-
+    13 000001AA 72697665722070726F-
+    13 000001B3 6772616D2E         
+    14 000001B8 256C6400                	int_format db "%ld",0
+    15 000001BC 256C6600                	one_float_format db "%lf",0
+    16                                  	
+    17                                  segment .bss
+    18                                  segment .text
+    19                                  
+    20                                  hamonic_sum:
+    21                                  ;===== Backup all the GPRs ========================================================================================================
+    22 00000000 55                      push rbp                                                    ;Backup the base pointer
+    23 00000001 4889E5                  mov  rbp,rsp                                                ;Advance the base pointer to start of the current 
+    24 00000004 57                      push rdi                                                    ;Backup rdi
+    25 00000005 56                      push rsi                                                    ;Backup rsi
+    26 00000006 52                      push rdx                                                    ;Backup rdx
+    27 00000007 51                      push rcx                                                    ;Backup rcx
+    28 00000008 4150                    push r8                                                     ;Backup r8
+    29 0000000A 4151                    push r9                                                     ;Backup r9
+    30 0000000C 4152                    push r10                                                    ;Backup r10
+    31 0000000E 4153                    push r11                                                    ;Backup r11: printf often changes r11
+    32 00000010 4154                    push r12                                                    ;Backup r12
+    33 00000012 4155                    push r13                                                    ;Backup r13
+    34 00000014 4156                    push r14                                                    ;Backup r14
+    35 00000016 4157                    push r15                                                    ;Backup r15
+    36 00000018 53                      push rbx                                                    ;Backup rbx
+    37 00000019 9C                      pushf                                                       ;Backup rflags
+    38                                  ;Registers rax, rip, and rsp are usually not backed up.
+    39                                  
+    40                                  ;=====================================welcome message ===================================================================
+    41 0000001A B800000000              	mov rax,0
+    42 0000001F 48BF-                   	mov rdi, welcome_message
+    42 00000021 [0000000000000000] 
+    43 00000029 E8(00000000)            	call printf
+    44                                  
+    45                                  ;=====================================prompt user to input number of terms  ===================================================================
+    46 0000002E B800000000              	mov rax,0
+    47 00000033 48BF-                   	mov rdi, prompt_message
+    47 00000035 [4300000000000000] 
+    48 0000003D E8(00000000)            	call printf
+    49                                  	
+    50                                  ;=======================get number of terms from user===================
+    51 00000042 B800000000              	mov rax,0	
+    52 00000047 6A00                    	push qword 0
+    53 00000049 6A00                    	push qword 0
+    54 0000004B 48BF-                   	mov rdi, one_float_format
+    54 0000004D [BC01000000000000] 
+    55 00000055 4889E6                  	mov rsi, rsp
+    56 00000058 E8(00000000)            	call scanf
+    57 0000005D F2440F102424            	movsd xmm12, [rsp]	;xmm12 hold the number of terms
+    58 00000063 58                      	pop rax
+    59 00000064 58                      	pop rax	
+    60                                  ;=================================get the clock tics the first time ======================================================================= 
+    61                                  
+    62 00000065 0F31                    	rdtsc 
+    63 00000067 48C1E220                	shl rdx, 32	;move left == make the tics goes in rdx 
+    64 0000006B 4809C2                  	or rdx,rax
+    65 0000006E 4989D6                  	mov r14, rdx	;r14 hold the value of the 1st stics (long int)
+    66                                  	
+    67                                  ;=====================================print out the number of 1st tics value ===================================================================
+    68 00000071 B800000000              	mov rax,0
+    69 00000076 48BF-                   	mov rdi, clock_message_1st
+    69 00000078 [8800000000000000] 
+    70 00000080 4C89F6                  	mov rsi, r14
+    71 00000083 E8(00000000)            	call printf
+    72                                  
+    73                                  
+    74                                  
+    75                                  ;=====================================loop to find the sum of Harmonic series ===================================================================
+    76                                  	;Note: movsd xmm15,0 is not right syntax
+    77                                  	
+    78                                  		;movsd xmm15,0	;xmm15 will hold the sum, set it to 0.0
+    79 00000088 B800000000              		mov rax, 0x0000000000000000
+    80 0000008D 50                      		push rax
+    81 0000008E F2440F103C24            		movsd xmm15,[rsp]
+    82 00000094 58                      		pop rax
+    83                                  		
+    84                                  		
+    85                                  		;movsd xmm14,1	;numerator ,set it to 1.0
+    86 00000095 48B8000000000000F0-     		mov rax, 0x3FF0000000000000
+    86 0000009E 3F                 
+    87 0000009F 50                      		push rax
+    88 000000A0 F2440F103424            		movsd xmm14,[rsp]
+    89 000000A6 58                      		pop rax
+    90                                  
+    91                                  		;movsd xmm13,1	;determinator, set it to 1.0
+    92 000000A7 48B8000000000000F0-     		mov rax, 0x3FF0000000000000
+    92 000000B0 3F                 
+    93 000000B1 50                      		push rax
+    94 000000B2 F2440F102C24            		movsd xmm13,[rsp]
+    95 000000B8 58                      		pop rax
+    96                                  		
+    97                                  		
+    98                                  	loop:	
+    99 000000B9 F2450F5EF5              		divsd xmm14,xmm13	; xmm14 = xmm14/xmm13
+   100 000000BE F2450F58FE              		addsd xmm15,xmm14	; xmm15 = xmm15 + xmm14
+   101                                  		
+   102                                  		;movsd xmm14,1	;numerator, set it to 1.0 again
+   103 000000C3 48B8000000000000F0-     		mov rax, 0x3FF0000000000000
+   103 000000CC 3F                 
+   104 000000CD 50                      		push rax
+   105 000000CE F2440F103424            		movsd xmm14,[rsp]
+   106 000000D4 58                      		pop rax
+   107                                  		
+   108 000000D5 F2450F58EE              		addsd xmm13,xmm14	;  inceasing xmm13 by 1
+   109 000000DA 66450F2EEC              		ucomisd xmm13,xmm12		;   xmmr12 == number of terms that user inputed 
+   110 000000DF 76D8                    		jbe loop	; jump if <= xmm12
+   111                                  
+   112                                  ;=====================================print out the final sum ==================================================================
+   113 000000E1 B801000000              		mov rax,1
+   114 000000E6 48BF-                   		mov rdi, sum_message
+   114 000000E8 [5401000000000000] 
+   115 000000F0 F2410F10C7              		movsd xmm0, xmm15
+   116 000000F5 E8(00000000)            		call printf
+   117                                  
+   118                                  
+   119                                  
+   120                                  ;=================================get the clock tics the second time =======================================================================
+   121 000000FA B800000000              	mov rax,0
+   122 000000FF BA00000000              	mov rdx,0
+   123 00000104 0F31                    	rdtsc 
+   124 00000106 48C1E220                	shl rdx, 32	;move left == make the tics goes  in rdx
+   125 0000010A 4809C2                  	or rdx,rax
+   126 0000010D 4989D7                  	mov r15, rdx	;r15 hold the value of the 2nd stics
+   127                                  	
+   128                                  ;=====================================print out the number of 2nd tics value ===================================================================
+   129 00000110 B800000000              	mov rax,0
+   130 00000115 48BF-                   	mov rdi, clock_message_2nd
+   130 00000117 [CF00000000000000] 
+   131 0000011F 4C89FE                  	mov rsi, r15
+   132 00000122 E8(00000000)            	call printf
+   133                                  	
+   134                                  ;=================diference = 2nd tics - 1st tics =============
+   135 00000127 4D29F7                  		sub r15,r14 ; r15 = r15 - r14
+   136                                  		
+   137                                  ;=====================================calculate the eslapsed time  ===================================================================
+   138                                  	;note: convert numerator and detomenator to float because the result may be float
+   139                                  	
+   140 0000012A F24D0F2ADF              	cvtsi2sd xmm11,r15	;convert long integer to float number, xmm11 hold the diference
+   141 0000012F F2450F10CB              	movsd xmm9,xmm11	; xmm9 hold the diference
+   142                                  	
+   143 00000134 48B8CDCCCCCCCCCC04-     	mov rax, 0x4004CCCCCCCCCCCD	;mov 2.6ghz into rax
+   143 0000013D 40                 
+   144 0000013E 50                      	push rax
+   145 0000013F F2440F101424            	movsd xmm10,[rsp]	;xmm10 hold 2.6
+   146 00000145 58                      	pop rax
+   147                                  	
+   148 00000146 F2450F5EDA              	divsd xmm11, xmm10	; xmm11 = xmm11/xmm10, xmm11 hold the eslapsed time in tics
+   149                                  	
+   150                                  ;============================convert tics to seconds =========
+   151 0000014B 41BB00CA9A3B            		mov r11,1000000000
+   152 00000151 F24D0F2AC3              		cvtsi2sd xmm8, r11
+   153 00000156 F2450F5ED8              		divsd xmm11,xmm8	;xmm11 = xmm11 * xmm8
+   154                                  		
+   155                                  	
+   156                                  ;=====================================print out the number tics and eslapsed time ===================================================================
+   157                                  	
+   158                                  	
+   159 0000015B B802000000              	mov rax,2
+   160 00000160 48BF-                   	mov rdi, time_elapsed_message
+   160 00000162 [0B01000000000000] 
+   161 0000016A F2410F10C1              	movsd xmm0,xmm9
+   162 0000016F F2410F10CB              	movsd xmm1, xmm11
+   163 00000174 E8(00000000)            	call printf
+   164                                  ;send back the hamornic sum back to driver 
+   165 00000179 F2410F10C7              	movsd xmm0, xmm15	
+   166                                  			
+   167                                  ;===== Restore original values to integer registers ===============================================================================
+   168 0000017E 9D                      popf                                                        ;Restore rflags
+   169 0000017F 5B                      pop rbx                                                     ;Restore rbx
+   170 00000180 415F                    pop r15                                                     ;Restore r15
+   171 00000182 415E                    pop r14                                                     ;Restore r14
+   172 00000184 415D                    pop r13                                                     ;Restore r13
+   173 00000186 415C                    pop r12                                                     ;Restore r12
+   174 00000188 415B                    pop r11                                                     ;Restore r11
+   175 0000018A 415A                    pop r10                                                     ;Restore r10
+   176 0000018C 4159                    pop r9                                                      ;Restore r9
+   177 0000018E 4158                    pop r8                                                      ;Restore r8
+   178 00000190 59                      pop rcx                                                     ;Restore rcx
+   179 00000191 5A                      pop rdx                                                     ;Restore rdx
+   180 00000192 5E                      pop rsi                                                     ;Restore rsi
+   181 00000193 5F                      pop rdi                                                     ;Restore rdi
+   182 00000194 5D                      pop rbp                                                     ;Restore rbp
+   183                                  
+   184 00000195 C3                      ret
